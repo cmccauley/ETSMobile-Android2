@@ -16,10 +16,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.joda.time.DateTime;
 
 import java.sql.SQLException;
@@ -28,6 +26,8 @@ import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
@@ -49,12 +49,14 @@ public class HoraireFragment extends HttpFragment implements Observer {
 
     private HoraireManager horaireManager;
     private CustomProgressDialog customProgressDialog;
-    private ListView horaireListView;
+    @Bind(R.id.listView_horaire)
+    ListView horaireListView;
     private ArrayList<TodayDataRowItem> listSeances;
     private SeanceAdapter seanceAdapter;
     private DateTime dateTime = new DateTime();
     private DatabaseHelper databaseHelper;
-    private ProgressBar progressBarSyncHoraire;
+    @Bind(R.id.progressBar_sync_horaire)
+    ProgressBar progressBarSyncHoraire;
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -129,9 +131,9 @@ public class HoraireFragment extends HttpFragment implements Observer {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_calendar, container, false);
 
+        ButterKnife.bind(this,v);
         databaseHelper = new DatabaseHelper(getActivity());
 
-        horaireListView = (ListView) v.findViewById(R.id.listView_horaire);
         horaireListView.setEmptyView(v.findViewById(R.id.txt_empty_calendar));
 
         seanceAdapter = new SeanceAdapter(getActivity());
@@ -148,7 +150,6 @@ public class HoraireFragment extends HttpFragment implements Observer {
         horaireManager = new HoraireManager(this, getActivity());
         horaireManager.addObserver(this);
 
-        progressBarSyncHoraire = (ProgressBar) v.findViewById(R.id.progressBar_sync_horaire);
         progressBarSyncHoraire.setVisibility(ProgressBar.VISIBLE);
 
 //        customProgressDialog = new CustomProgressDialog(getActivity(), R.drawable.loading_spinner, "Synchronisation en cours");

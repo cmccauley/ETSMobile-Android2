@@ -22,6 +22,8 @@ import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
@@ -39,12 +41,15 @@ import ca.etsmtl.applets.etsmobile2.R;
 
 public class TodayFragment extends HttpFragment implements Observer {
 
-    private ListView todaysList;
+    @Bind(R.id.todays_list)
+    ListView todaysList;
+    @Bind(R.id.todays_name)
+    TextView todaysTv;
+    @Bind(R.id.tv_todays_no_courses)
+    TextView tvNoCourses;
     private HoraireManager horaireManager;
-    private TextView todaysTv;
     private DateTime dateTime;
     private DatabaseHelper databaseHelper;
-    private TextView tvNoCourses;
     private ArrayList<Seances> listSeances;
     private ArrayList<Event> events;
     private TodayAdapter adapter;
@@ -60,10 +65,7 @@ public class TodayFragment extends HttpFragment implements Observer {
                              Bundle savedInstanceState) {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_today, container, false);
         super.onCreateView(inflater, v, savedInstanceState);
-        todaysList = (ListView) v.findViewById(R.id.todays_list);
-
-        todaysTv = (TextView) v.findViewById(R.id.todays_name);
-        tvNoCourses = (TextView) v.findViewById(R.id.tv_todays_no_courses);
+        ButterKnife.bind(this,v);
 
         horaireManager = new HoraireManager(this, getActivity());
         horaireManager.addObserver(this);

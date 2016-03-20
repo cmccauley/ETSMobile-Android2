@@ -29,6 +29,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCoreCourse;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCoreCourses;
@@ -49,21 +51,17 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
 
     private long enqueue;
     private DownloadManager dm;
-
     private String moodleCourseId;
-
     private ExpandableListMoodleSectionAdapter expandableListMoodleAdapter;
 
-    private ExpandableListView expListView;
+    @Bind(R.id.expandableListView_moodle_courses_details)
+    ExpandableListView expListView;
 
     private HashMap<HeaderText, Object[]> listDataSectionName; // Pour gérer les ressources/liens par section
     private List<HeaderText> listDataHeader;
-
     private ArrayList<MoodleCoreModule> listMoodleLinkModules;
     private ArrayList<MoodleModuleContent> listMoodleResourceContents;
-
     private BroadcastReceiver receiver = null;
-
 
     public static MoodleCourseDetailsFragment newInstance(int moodleCourseId) {
         MoodleCourseDetailsFragment fragment = new MoodleCourseDetailsFragment();
@@ -136,9 +134,8 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_moodle_details, container, false);
+        ButterKnife.bind(this,v);
         super.onCreateView(inflater, v, savedInstanceState);
-
-        expListView = (ExpandableListView) v.findViewById(R.id.expandableListView_moodle_courses_details);
 
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 

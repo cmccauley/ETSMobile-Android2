@@ -2,7 +2,6 @@ package ca.etsmtl.applets.etsmobile.ui.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +16,8 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.ElementEvaluation;
@@ -25,8 +26,6 @@ import ca.etsmtl.applets.etsmobile.ui.adapter.MyCourseDetailAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.NoteManager;
 import ca.etsmtl.applets.etsmobile2.R;
-
-import org.codehaus.jackson.annotate.JsonAutoDetect;
 
 public class NotesDetailsFragment extends HttpFragment implements Observer {
 
@@ -37,8 +36,8 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
     public static String GROUPE = "GROUPE";
     public static String TITLECOURS = "TITLECOURS";
 
-
-    private ListView mlistView;
+    @Bind(android.R.id.list)
+    ListView mlistView;
     private String cote;
     private String sigle;
     private String session;
@@ -46,12 +45,10 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
     private String groupe;
     private String titreCours;
     private String id;
-
     private ListeDesElementsEvaluation mlisteDesElementsEvaluation;
-
     private NoteManager mNoteManager;
-
-    private ProgressBar progressBarDetailsNotes;
+    @Bind(R.id.progressBar_notes_details)
+    ProgressBar progressBarDetailsNotes;
 
     public static NotesDetailsFragment newInstance(String sigle, String session, String sessionAbrege, String cote, String groupe, String titreCours) {
         NotesDetailsFragment fragment = new NotesDetailsFragment();
@@ -90,9 +87,7 @@ public class NotesDetailsFragment extends HttpFragment implements Observer {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.notes_details_fragment, container, false);
         ((TextView) v.findViewById(R.id.note_fragment_titre_cours)).setText(titreCours);
-        mlistView = (ListView) v.findViewById(android.R.id.list);
-
-        progressBarDetailsNotes = (ProgressBar) v.findViewById(R.id.progressBar_notes_details);
+        ButterKnife.bind(this,v);
         progressBarDetailsNotes.setVisibility(ProgressBar.VISIBLE);
         refresh();
 

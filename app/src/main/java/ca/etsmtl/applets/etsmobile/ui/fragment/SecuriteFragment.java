@@ -17,14 +17,16 @@ import android.widget.TextView;
 //import com.google.android.gms.maps.GoogleMap;
 //import com.google.android.gms.maps.MapView;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import ca.etsmtl.applets.etsmobile.ui.activity.UrgenceActivity;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile2.R;
 
 public class SecuriteFragment extends BaseFragment {
 	
-	
-	private ListView listView;
+	@Bind(android.R.id.list)
+	ListView listView;
 //	private MapView mapView;
 //	GoogleMap map;
 	
@@ -64,7 +66,7 @@ public class SecuriteFragment extends BaseFragment {
 
 		final Activity activity = getActivity();
 
-		listView = (ListView) v.findViewById(android.R.id.list);
+		ButterKnife.bind(this,v);
 
 		final ViewGroup viewGroup = (ViewGroup) inflater.inflate(
 				R.layout.secu_list_header,

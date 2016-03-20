@@ -19,16 +19,15 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Set;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import ca.etsmtl.applets.etsmobile.http.AppletsApiNewsRequest;
 import ca.etsmtl.applets.etsmobile.model.Nouvelle;
 import ca.etsmtl.applets.etsmobile.model.Nouvelles;
@@ -43,7 +42,8 @@ public class NewsFragment extends HttpFragment {
 
     private static String TAG = NewsFragment.class.getName();
     private final long DAY_IN_MS = 1000 * 60 * 60 * 24;
-    private ListView newsListView;
+    @Bind(R.id.listView_news)
+    ListView newsListView;
     private NewsAdapter adapter;
     private ArrayList<Nouvelle> nouvellesList;
 
@@ -60,9 +60,7 @@ public class NewsFragment extends HttpFragment {
 			Bundle savedInstanceState) {
 
 		View v = inflater.inflate(R.layout.fragment_news, container, false);
-
-        newsListView = (ListView) v.findViewById(R.id.listView_news);
-
+        ButterKnife.bind(this,v);
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
 
 		return v;

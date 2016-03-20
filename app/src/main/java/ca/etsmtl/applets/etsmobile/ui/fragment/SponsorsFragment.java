@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.webkit.URLUtil;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -18,7 +17,8 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import ca.etsmtl.applets.etsmobile.http.AppletsApiSponsorRequest;
 import ca.etsmtl.applets.etsmobile.model.Sponsor;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SponsorAdapter;
@@ -29,7 +29,8 @@ import ca.etsmtl.applets.etsmobile2.R;
 
 public class SponsorsFragment extends HttpFragment implements Observer {
 
-    private GridView sponsorGridView;
+    @Bind(R.id.gridView_sponsor)
+    GridView sponsorGridView;
     private SponsorAdapter adapter;
     private ArrayList<Sponsor> sponsorList;
     private SponsorManager mSponsorManager;
@@ -44,8 +45,8 @@ public class SponsorsFragment extends HttpFragment implements Observer {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_sponsors, container, false);
+        ButterKnife.bind(this,v);
         loadingView = (LoadingView) v.findViewById(R.id.loadingView_sponsor);
-        sponsorGridView = (GridView) v.findViewById(R.id.gridView_sponsor);
         sponsorList = new ArrayList<Sponsor>();
         mSponsorManager = new SponsorManager(getActivity());
         mSponsorManager.addObserver(this);

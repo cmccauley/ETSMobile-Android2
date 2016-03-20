@@ -1,15 +1,9 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import com.octo.android.robospice.persistence.exception.SpiceException;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AuthenticatorDescription;
 import android.accounts.OnAccountsUpdateListener;
-import android.app.Activity;
 import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -21,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,8 +23,14 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemSelectedListener;
-import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
+
+import com.octo.android.robospice.persistence.exception.SpiceException;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import ca.etsmtl.applets.etsmobile2.R;
 
 public class ContactAdderFragment extends HttpFragment implements
@@ -40,16 +41,23 @@ public class ContactAdderFragment extends HttpFragment implements
 
 	private ArrayList<AccountData> mAccounts;
 	private AccountAdapter mAccountAdapter;
-	private Spinner mAccountSpinner;
-	private EditText mContactEmailEditText;
+	@Bind(R.id.accountSpinner)
+	Spinner mAccountSpinner;
+	@Bind(R.id.contactEmailEditText)
+	EditText mContactEmailEditText;
 	private ArrayList<Integer> mContactEmailTypes;
-	private Spinner mContactEmailTypeSpinner;
-	private EditText mContactNameEditText;
-	private EditText mContactPhoneEditText;
-	private EditText mContactAddressEditText;
+	@Bind(R.id.contactEmailTypeSpinner)
+	Spinner mContactEmailTypeSpinner;
+	@Bind(R.id.contactNameEditText)
+	EditText mContactNameEditText;
+	@Bind(R.id.contactPhoneEditText)
+	EditText mContactPhoneEditText;
+	@Bind(R.id.addressEditText)
+	EditText mContactAddressEditText;
 	private ArrayList<Integer> mContactPhoneTypes;
-	private Spinner mContactPhoneTypeSpinner;
-	private Button mContactSaveButton;
+	@Bind(R.id.contactPhoneTypeSpinner)
+	Spinner mContactPhoneTypeSpinner;
+
 	private AccountData mSelectedAccount;
 	private String prenom;
 	private String service;
@@ -111,29 +119,15 @@ public class ContactAdderFragment extends HttpFragment implements
 		// phone = BottinDetailsFragment.TELBUREAU;
 
 		// Obtain handles to UI objects
-		mAccountSpinner = (Spinner) v.findViewById(R.id.accountSpinner);
-
-		mContactNameEditText = (EditText) v
-				.findViewById(R.id.contactNameEditText);
+		ButterKnife.bind(this,v);
 		System.out.println(prenom);
 		mContactNameEditText.setText(prenom + " " + nom);
-		mContactPhoneEditText = (EditText) v
-				.findViewById(R.id.contactPhoneEditText);
 		mContactPhoneEditText.setText(phone);
-		mContactEmailEditText = (EditText) v
-				.findViewById(R.id.contactEmailEditText);
 		mContactEmailEditText.setText(courriel);
 
-		mContactPhoneTypeSpinner = (Spinner) v
-				.findViewById(R.id.contactPhoneTypeSpinner);
-		mContactEmailTypeSpinner = (Spinner) v
-				.findViewById(R.id.contactEmailTypeSpinner);
-
-		mContactAddressEditText = (EditText) v
-				.findViewById(R.id.addressEditText);
 		mContactAddressEditText.setText(empl);
 
-		mContactSaveButton = (Button) v.findViewById(R.id.contactSaveButton);
+		Button mContactSaveButton = (Button) v.findViewById(R.id.contactSaveButton);
 
 		// Prepare list of supported account types
 		// Note: Other types are available in ContactsContract.CommonDataKinds

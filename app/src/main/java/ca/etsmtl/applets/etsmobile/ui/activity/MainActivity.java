@@ -38,6 +38,8 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
@@ -72,8 +74,10 @@ import io.supportkit.ui.ConversationActivity;
 public class MainActivity extends Activity {
 
     public static LinkedHashMap<String, MyMenuItem> mMenu = new LinkedHashMap<String, MyMenuItem>(17);
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
+    @Bind(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
+    @Bind(R.id.left_drawer)
+    ListView mDrawerList;
     private CharSequence mTitle;
     private ActionBarDrawerToggle mDrawerToggle;
     private Fragment mfragment;
@@ -97,8 +101,7 @@ public class MainActivity extends Activity {
         if (savedInstanceState != null) {
             instantiateFragments(savedInstanceState);
         }
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        ButterKnife.bind(this);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         accountManager = AccountManager.get(this);
 

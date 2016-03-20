@@ -22,6 +22,8 @@ import java.net.URL;
 import java.util.Date;
 import java.util.Locale;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -51,13 +53,18 @@ public class NewsDetailsFragment extends HttpFragment {
     private String id;
     private String icon_link;
 
-    private TextView tvFrom;
-    private ImageView ivImage;
-    private TextView tvTitle;
-    private TextView tvFacebook_link;
-    private TextView tvUpdatedTime;
-    private TextView tvMessage;
-
+    @Bind(R.id.tv_news_details_from)
+    TextView tvFrom;
+    @Bind(R.id.iv_news_details_image)
+    ImageView ivImage;
+    @Bind(R.id.tv_news_details_title)
+    TextView tvTitle;
+    @Bind(R.id.tv_news_details_fb_link)
+    TextView tvFacebook_link;
+    @Bind(R.id.tv_news_details_updated_time)
+    TextView tvUpdatedTime;
+    @Bind(R.id.tv_news_details_message)
+    TextView tvMessage;
     
     
     public static NewsDetailsFragment newInstance(String from, String image, String title, String created_time, String facebook_link, String updated_time, String message, String id, String icon_link) {
@@ -103,13 +110,7 @@ public class NewsDetailsFragment extends HttpFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_news_details, container, false);
-
-        tvFrom = (TextView) v.findViewById(R.id.tv_news_details_from);
-        ivImage = (ImageView) v.findViewById(R.id.iv_news_details_image);
-        tvTitle = (TextView) v.findViewById(R.id.tv_news_details_title);
-        tvFacebook_link = (TextView) v.findViewById(R.id.tv_news_details_fb_link);
-        tvUpdatedTime = (TextView) v.findViewById(R.id.tv_news_details_updated_time);
-        tvMessage = (TextView) v.findViewById(R.id.tv_news_details_message);
+        ButterKnife.bind(this,v);
 
         tvFrom.setText(from);
         tvTitle.setText(title);

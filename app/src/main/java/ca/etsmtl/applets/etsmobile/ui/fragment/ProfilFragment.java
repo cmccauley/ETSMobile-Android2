@@ -7,12 +7,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
@@ -30,7 +31,8 @@ public class ProfilFragment extends HttpFragment {
 
     private ProfileAdapter profileAdapter;
     private ProfilManager profilManager;
-    private ListView listViewProfile;
+    @Bind(R.id.listview_profile)
+    ListView listViewProfile;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,13 +44,13 @@ public class ProfilFragment extends HttpFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_profil, container, false);
         super.onCreateView(inflater, v, savedInstanceState);
+        ButterKnife.bind(this,v);
 
         loadingView.showLoadingView();
 
         dataManager.getDataFromSignet(SignetMethods.INFO_ETUDIANT, ApplicationManager.userCredentials, this, "");
         dataManager.getDataFromSignet(SignetMethods.LIST_PROGRAM, ApplicationManager.userCredentials, this, "");
 
-        listViewProfile = (ListView) v.findViewById(R.id.listview_profile);
         listViewProfile.setAdapter(profileAdapter);
 
         profilManager = new ProfilManager(getActivity());

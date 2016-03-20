@@ -7,23 +7,19 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
-import ca.etsmtl.applets.etsmobile.model.Cours;
 import ca.etsmtl.applets.etsmobile.model.ListeDeCours;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
-import ca.etsmtl.applets.etsmobile.model.Trimestre;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NoteAdapter;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NotesSessionItem;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SessionCoteAdapter;
@@ -40,16 +36,15 @@ public class NotesFragment extends HttpFragment implements Observer {
 
 
     private static String TAG = NotesFragment.class.getName();
-    private ListView mListView;
-    private NoteAdapter adapter;
+    @Bind(R.id.activity_note_listview)
+    ListView mListView;
 
+    private NoteAdapter adapter;
     private SessionCoteItem[] sessionCoteItemArray;
     private NotesSessionItem[] notesSession;
-
     private ListeDeCours listeDeCours;
     private ListeDeSessions listeDeSessions;
     private HashMap<String, String> mapNoteACeJour;
-
     private NoteManager mNoteManager;
 
     @Override
@@ -62,7 +57,7 @@ public class NotesFragment extends HttpFragment implements Observer {
 
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_note, container, false);
         super.onCreateView(inflater, v, savedInstanceState);
-        mListView = (ListView) v.findViewById(R.id.activity_note_listview);
+        ButterKnife.bind(this,v);
 
         listeDeCours = new ListeDeCours();
         listeDeSessions = new ListeDeSessions();

@@ -69,11 +69,8 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
         accountManager = AccountManager.get(getBaseContext());
 
         // Set up the login form.
-        // mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
-        //mEmailView = (EditText) findViewById(R.id.email);
         mEmailView.setText(mEmail);
 
-       // mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -84,10 +81,6 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
                 return false;
             }
         });
-
-        //mLoginFormView = findViewById(R.id.login_form);
-        //mLoginStatusView = findViewById(R.id.login_status);
-        //mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
         findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
             @Override

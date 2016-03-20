@@ -19,6 +19,8 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.model.MonETSNotification;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NotificationsAdapter;
@@ -32,8 +34,10 @@ import ca.etsmtl.applets.etsmobile2.R;
  */
 public class NotificationActivity extends Activity implements RequestListener<Object> {
 
-    private ProgressBar progressBar;
-    private ListView listView;
+    @Bind(R.id.progressBar_notifications)
+    ProgressBar progressBar;
+    @Bind(R.id.listView_notifications)
+    ListView listView;
     private DatabaseHelper databaseHelper = new DatabaseHelper(this);
     private NotificationsAdapter notificationsAdapter;
     private SecurePreferences securePreferences;
@@ -42,11 +46,9 @@ public class NotificationActivity extends Activity implements RequestListener<Ob
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
-
+        ButterKnife.bind(this);
         securePreferences = new SecurePreferences(this);
 
-        progressBar = (ProgressBar) findViewById(R.id.progressBar_notifications);
-        listView = (ListView) findViewById(R.id.listView_notifications);
         progressBar.getIndeterminateDrawable().setColorFilter(
                 getResources().getColor(R.color.ets_red_fonce),
                 PorterDuff.Mode.MULTIPLY);

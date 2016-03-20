@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import ca.etsmtl.applets.etsmobile2.R;
 
 public class BottinDetailsFragment extends HttpFragment {
@@ -33,14 +35,20 @@ public class BottinDetailsFragment extends HttpFragment {
 	private String emplacement;
 	private String telbureau;
 	private String courriel;
-	
-	private TextView tv_nom_prenom;
-	private TextView tv_titre;
-	private TextView tv_service;
-	private TextView tv_emplacement;
-	private TextView tv_telbureau;
-	private TextView tv_courriel;
-	private Button btn_ajout_contact;
+	@Bind(R.id.tv_nom_prenom_bottin)
+	TextView tv_nom_prenom;
+	@Bind(R.id.tv_titre_bottin)
+	TextView tv_titre;
+	@Bind(R.id.tv_service_bottin)
+	TextView tv_service;
+	@Bind(R.id.tv_emplacement_bottin)
+	TextView tv_emplacement;
+	@Bind(R.id.tv_telbureau_bottin)
+	TextView tv_telbureau;
+	@Bind(R.id.tv_courriel_bottin)
+	TextView tv_courriel;
+	@Bind(R.id.btn_ajout_contact_bottin)
+	Button btn_ajout_contact;
 	
 	public static BottinDetailsFragment newInstance(String nom, String prenom, String telBureau, String emplacement, String courriel, String service, String titre){
 		BottinDetailsFragment fragment = new BottinDetailsFragment();
@@ -88,14 +96,8 @@ public class BottinDetailsFragment extends HttpFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {		
 		View v = inflater.inflate(R.layout.bottin_detail_fragment, container, false);
-		
-		tv_nom_prenom = (TextView) v.findViewById(R.id.tv_nom_prenom_bottin);
-		tv_titre = (TextView) v.findViewById(R.id.tv_titre_bottin);
-		tv_service = (TextView) v.findViewById(R.id.tv_service_bottin);
-		tv_emplacement = (TextView) v.findViewById(R.id.tv_emplacement_bottin);
-		tv_telbureau = (TextView) v.findViewById(R.id.tv_telbureau_bottin);
-		tv_courriel = (TextView) v.findViewById(R.id.tv_courriel_bottin);
-		btn_ajout_contact = (Button) v.findViewById(R.id.btn_ajout_contact_bottin);
+
+		ButterKnife.bind(this, v);
 		
 		tv_nom_prenom.setText(prenom+" "+nom);
 		tv_titre.setText(titre);

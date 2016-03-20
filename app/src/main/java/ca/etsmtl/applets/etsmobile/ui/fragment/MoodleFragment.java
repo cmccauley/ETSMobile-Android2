@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourse;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCourses;
@@ -28,7 +30,6 @@ import ca.etsmtl.applets.etsmobile.ui.activity.MoodleCourseActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MoodleCoursesAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.CourseComparator;
-import ca.etsmtl.applets.etsmobile.util.SeanceComparator;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -40,7 +41,7 @@ import ca.etsmtl.applets.etsmobile2.R;
  */
 public class MoodleFragment extends HttpFragment {
 
-
+    @Bind(R.id.listView_moodle_courses)
     ListView moodleCoursesListView;
     private MoodleCoursesAdapter moodleCoursesAdapter;
     private String lastInserted;
@@ -53,9 +54,8 @@ public class MoodleFragment extends HttpFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup v = (ViewGroup) inflater.inflate(R.layout.fragment_moodle, container, false);
-
+        ButterKnife.bind(this,v);
         super.onCreateView(inflater, v, savedInstanceState);
-        moodleCoursesListView = (ListView) v.findViewById(R.id.listView_moodle_courses);
         Log.d("MoodleFragment", "Moodle course list fragment is instantiated");
 
 
