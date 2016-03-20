@@ -11,6 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import ca.etsmtl.applets.etsmobile.ui.activity.NotesDetailsActivity;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -24,14 +26,21 @@ public class NoteAdapter extends ArrayAdapter<NotesSessionItem> {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(int position, View view, ViewGroup parent) {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View v = inflater.inflate(R.layout.row_note_menu, parent, false);
+
+		ViewHolder holder;
+		if (view != null) {
+			holder = (ViewHolder) view.getTag();
+		} else {
+			view = inflater.inflate(R.layout.row_note_menu, parent, false);
+			holder = new ViewHolder(view);
+			view.setTag(holder);
+		}
 		final NotesSessionItem notesSession = getItem(position);
-		((TextView) v.findViewById(R.id.row_note_menu_session_text)).setText(notesSession.sessionName);
-		final GridView gridview = (GridView) v.findViewById(R.id.row_note_menu_gridview);
-		gridview.setAdapter(notesSession.arrayAdapter);
-		gridview.setOnItemClickListener(new OnItemClickListener() {
+		holder.tvNoteMenuSession.setText(notesSession.sessionName);
+		holder.gridview.setAdapter(notesSession.arrayAdapter);
+		holder.gridview.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
 				SessionCoteItem sessionCote = (SessionCoteItem) notesSession.arrayAdapter.getItem(position);
@@ -48,19 +57,20 @@ public class NoteAdapter extends ArrayAdapter<NotesSessionItem> {
                 i.putExtra("cote", cote);
                 i.putExtra("groupe", sessionCote.groupe);
                 i.putExtra("titreCours", sessionCote.titreCours);
-
                 context.startActivity(i);
-
-
-
-//				Fragment fragment = NotesDetailsFragment.newInstance(sessionCote.sigle, notesSession.sessionName, cote,
-//						sessionCote.groupe,sessionCote.titreCours);
-//				FragmentManager fragmentManager = ((Activity) context).getFragmentManager();
-//				fragmentManager.beginTransaction().replace(R.id.content_frame, fragment, "NotesDetailsFragment")
-//						.addToBackStack(null).commit();
 			}
 		});
-		return v;
+		return view;
+	}
+
+	static class ViewHolder {
+		@Bind(R.id.row_note_menu_session_text)
+		TextView tvNoteMenuSession;
+		@Bind(R.id.row_note_menu_gridview)
+		GridView gridview;
+		public ViewHolder(View view){
+			ButterKnife.bind(this, view);
+		}
 	}
 
 }

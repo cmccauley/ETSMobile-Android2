@@ -14,6 +14,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import ca.etsmtl.applets.etsmobile.model.Sponsor;
 import ca.etsmtl.applets.etsmobile2.R;
 
@@ -42,10 +44,7 @@ public class SponsorAdapter extends ArrayAdapter<Sponsor> {
             holder = (ViewHolder) view.getTag();
         } else {
             view = inflater.inflate(R.layout.row_sponsor, parent, false);
-            holder = new ViewHolder();
-            holder.tvName = (TextView) view.findViewById(R.id.tv_row_sponsor_name);
-            holder.imageSource = (ImageView) view.findViewById(R.id.iv_sponsor_source);
-
+            holder = new ViewHolder(view);
             view.setTag(holder);
         }
         int imageSize;
@@ -69,8 +68,12 @@ public class SponsorAdapter extends ArrayAdapter<Sponsor> {
     }
 
     static class ViewHolder {
+        @Bind(R.id.tv_row_sponsor_name)
         TextView tvName;
+        @Bind(R.id.iv_sponsor_source)
         ImageView imageSource;
+        public ViewHolder(View view){
+            ButterKnife.bind(this, view);
+        }
     }
-
 }
