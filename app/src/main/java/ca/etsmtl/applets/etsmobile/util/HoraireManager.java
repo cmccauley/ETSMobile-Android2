@@ -35,11 +35,22 @@ public class HoraireManager extends Observable implements RequestListener<Object
     private boolean syncEventListEnded = false;
 
     private String calendarName = "Mes cours";
+    DatabaseHelper databaseHelper;
+    Dao<HoraireActivite, ?> daoDesActivitesEtProf;
+    Dao<JoursRemplaces, ?> daoJoursRemplaces;
+    Dao<Seances, ?> daoSeances;
 
 
     public HoraireManager(final RequestListener<Object> listener, Activity activity) {
         this.activity = activity;
-
+        databaseHelper = new DatabaseHelper(activity);
+        try {
+            daoDesActivitesEtProf = databaseHelper.getDao(HoraireActivite.class);
+            daoJoursRemplaces = databaseHelper.getDao(JoursRemplaces.class);
+            daoSeances = databaseHelper.getDao(Seances.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -53,7 +64,7 @@ public class HoraireManager extends Observable implements RequestListener<Object
         new AsyncTask<Void, Void, Void>() {
 
             @Override
-            protected Void doInBackground( Void... voids ) {
+            protected Void doInBackground(Void... voids) {
                 //listeHoraireEtProf
                 if (o instanceof listeDesActivitesEtProf) {
                     listeDesActivitesEtProf listeDesActivitesEtProf = (listeDesActivitesEtProf) o;
@@ -75,8 +86,17 @@ public class HoraireManager extends Observable implements RequestListener<Object
                 if (o instanceof listeSeances) {
                     listeSeances listeSeancesObj = (listeSeances) o;
 
-                    deleteExpiredSeances(listeSeancesObj);
-                    createOrUpdateSeancesInDB(listeSeancesObj);
+                    for (Seances SeancesInAPI : listeSeancesObj.ListeDesSeances) {
+
+                        SeancesInAPI.id = SeancesInAPI.coursGroupe +
+                                SeancesInAPI.dateDebut +
+                                SeancesInAPI.dateFin +
+                                SeancesInAPI.local;
+                    }
+
+                    new Synchronizer<Seances>(daoSeances)
+                            .synchronize(listeSeancesObj.ListeDesSeances);
+
                     syncSeancesEnded = true;
                 }
 

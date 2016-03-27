@@ -10,6 +10,8 @@ package ca.etsmtl.applets.etsmobile.model;
 //---------------------------------------------------
 
 
+import android.text.TextUtils;
+
 import java.util.Hashtable;
 
 import org.joda.time.DateTime;
@@ -27,38 +29,36 @@ import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
 import ca.etsmtl.applets.etsmobile.http.soap.Helper;
 
 @DatabaseTable(tableName = "seances")
-public class Seances extends AttributeContainer implements KvmSerializable
-{
-  
-  @DatabaseField
-  public String dateDebut;
-  
-  @DatabaseField
-  public String dateFin;
-  
-  @DatabaseField
-  public String coursGroupe;
-  
-  @DatabaseField
-  public String nomActivite;
-  
-  @DatabaseField
-  public String local;
-  
-  @DatabaseField
-  public String descriptionActivite;
-  
-  @DatabaseField
-  public String libelleCours;
-  
-  @DatabaseField(id = true)
-  public String id;
+public class Seances extends AttributeContainer implements KvmSerializable {
 
-  public Seances ()
-  {
-  }
+    @DatabaseField
+    public String dateDebut;
 
-    public void getData(DataMap map){
+    @DatabaseField
+    public String dateFin;
+
+    @DatabaseField
+    public String coursGroupe;
+
+    @DatabaseField
+    public String nomActivite;
+
+    @DatabaseField
+    public String local;
+
+    @DatabaseField
+    public String descriptionActivite;
+
+    @DatabaseField
+    public String libelleCours;
+
+    @DatabaseField(id = true)
+    public String id;
+
+    public Seances() {
+    }
+
+    public void getData(DataMap map) {
         dateDebut = map.getString("dateDebut");
         dateFin = map.getString("dateFin");
         coursGroupe = map.getString("coursGroupe");
@@ -68,7 +68,7 @@ public class Seances extends AttributeContainer implements KvmSerializable
         libelleCours = map.getString("libelleCours");
     }
 
-    public DataMap putData(){
+    public DataMap putData() {
         DataMap map = new DataMap();
         map.putString("dateDebut", dateDebut);
         map.putString("dateFin", dateFin);
@@ -80,214 +80,178 @@ public class Seances extends AttributeContainer implements KvmSerializable
         return map;
     }
 
-  public Seances (AttributeContainer inObj,ExtendedSoapSerializationEnvelope envelope)
-  {
-	    
-	  if (inObj == null)
-          return;
+    public Seances(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
 
-      SoapObject soapObject=(SoapObject)inObj; 
-      
-      if (soapObject.hasProperty("dateDebut"))
-      {	
-	      Object obj = soapObject.getProperty("dateDebut");
-          if (obj != null && obj.getClass().equals(SoapPrimitive.class))
-          {
-              SoapPrimitive j =(SoapPrimitive) obj;
-              if(j.toString()!=null)
-              {
-                  this.dateDebut =j.toString();
-              }
-	        }
-	        else if (obj!= null && obj instanceof String){
-              this.dateDebut = (String)obj;
-          }    
-      }
-      if (soapObject.hasProperty("dateFin"))
-      {	
-	        java.lang.Object obj = soapObject.getProperty("dateFin");
-          if (obj != null && obj.getClass().equals(SoapPrimitive.class))
-          {
-              SoapPrimitive j =(SoapPrimitive) obj;
-              if(j.toString()!=null)
-              {
-                  this.dateFin = j.toString();
-              }
-	        }
-	        else if (obj!= null && obj instanceof String){
-              this.dateFin = (String)obj;
-          }    
-      }
-      if (soapObject.hasProperty("coursGroupe"))
-      {	
-	        java.lang.Object obj = soapObject.getProperty("coursGroupe");
-          if (obj != null && obj.getClass().equals(SoapPrimitive.class))
-          {
-              SoapPrimitive j =(SoapPrimitive) obj;
-              if(j.toString()!=null)
-              {
-                  this.coursGroupe = j.toString();
-              }
-	        }
-	        else if (obj!= null && obj instanceof String){
-              this.coursGroupe = (String)obj;
-          }    
-      }
-      if (soapObject.hasProperty("nomActivite"))
-      {	
-	        java.lang.Object obj = soapObject.getProperty("nomActivite");
-          if (obj != null && obj.getClass().equals(SoapPrimitive.class))
-          {
-              SoapPrimitive j =(SoapPrimitive) obj;
-              if(j.toString()!=null)
-              {
-                  this.nomActivite = j.toString();
-              }
-	        }
-	        else if (obj!= null && obj instanceof String){
-              this.nomActivite = (String)obj;
-          }    
-      }
-      if (soapObject.hasProperty("local"))
-      {	
-	        java.lang.Object obj = soapObject.getProperty("local");
-          if (obj != null && obj.getClass().equals(SoapPrimitive.class))
-          {
-              SoapPrimitive j =(SoapPrimitive) obj;
-              if(j.toString()!=null)
-              {
-                  this.local = j.toString();
-              }
-	        }
-	        else if (obj!= null && obj instanceof String){
-              this.local = (String)obj;
-          }    
-      }
-      if (soapObject.hasProperty("descriptionActivite"))
-      {	
-	        java.lang.Object obj = soapObject.getProperty("descriptionActivite");
-          if (obj != null && obj.getClass().equals(SoapPrimitive.class))
-          {
-              SoapPrimitive j =(SoapPrimitive) obj;
-              if(j.toString()!=null)
-              {
-                  this.descriptionActivite = j.toString();
-              }
-	        }
-	        else if (obj!= null && obj instanceof String){
-              this.descriptionActivite = (String)obj;
-          }    
-      }
-      if (soapObject.hasProperty("libelleCours"))
-      {	
-	        java.lang.Object obj = soapObject.getProperty("libelleCours");
-          if (obj != null && obj.getClass().equals(SoapPrimitive.class))
-          {
-              SoapPrimitive j =(SoapPrimitive) obj;
-              if(j.toString()!=null)
-              {
-                  this.libelleCours = j.toString();
-              }
-	        }
-	        else if (obj!= null && obj instanceof String){
-              this.libelleCours = (String)obj;
-          }    
-      }
+        if (inObj == null)
+            return;
+
+        SoapObject soapObject = (SoapObject) inObj;
+
+        if (soapObject.hasProperty("dateDebut")) {
+            Object obj = soapObject.getProperty("dateDebut");
+            if (obj != null && obj.getClass().equals(SoapPrimitive.class)) {
+                SoapPrimitive j = (SoapPrimitive) obj;
+                if (j.toString() != null) {
+                    this.dateDebut = j.toString();
+                }
+            } else if (obj != null && obj instanceof String) {
+                this.dateDebut = (String) obj;
+            }
+        }
+        if (soapObject.hasProperty("dateFin")) {
+            java.lang.Object obj = soapObject.getProperty("dateFin");
+            if (obj != null && obj.getClass().equals(SoapPrimitive.class)) {
+                SoapPrimitive j = (SoapPrimitive) obj;
+                if (j.toString() != null) {
+                    this.dateFin = j.toString();
+                }
+            } else if (obj != null && obj instanceof String) {
+                this.dateFin = (String) obj;
+            }
+        }
+        if (soapObject.hasProperty("coursGroupe")) {
+            java.lang.Object obj = soapObject.getProperty("coursGroupe");
+            if (obj != null && obj.getClass().equals(SoapPrimitive.class)) {
+                SoapPrimitive j = (SoapPrimitive) obj;
+                if (j.toString() != null) {
+                    this.coursGroupe = j.toString();
+                }
+            } else if (obj != null && obj instanceof String) {
+                this.coursGroupe = (String) obj;
+            }
+        }
+        if (soapObject.hasProperty("nomActivite")) {
+            java.lang.Object obj = soapObject.getProperty("nomActivite");
+            if (obj != null && obj.getClass().equals(SoapPrimitive.class)) {
+                SoapPrimitive j = (SoapPrimitive) obj;
+                if (j.toString() != null) {
+                    this.nomActivite = j.toString();
+                }
+            } else if (obj != null && obj instanceof String) {
+                this.nomActivite = (String) obj;
+            }
+        }
+        if (soapObject.hasProperty("local")) {
+            java.lang.Object obj = soapObject.getProperty("local");
+            if (obj != null && obj.getClass().equals(SoapPrimitive.class)) {
+                SoapPrimitive j = (SoapPrimitive) obj;
+                if (j.toString() != null) {
+                    this.local = j.toString();
+                }
+            } else if (obj != null && obj instanceof String) {
+                this.local = (String) obj;
+            }
+        }
+        if (soapObject.hasProperty("descriptionActivite")) {
+            java.lang.Object obj = soapObject.getProperty("descriptionActivite");
+            if (obj != null && obj.getClass().equals(SoapPrimitive.class)) {
+                SoapPrimitive j = (SoapPrimitive) obj;
+                if (j.toString() != null) {
+                    this.descriptionActivite = j.toString();
+                }
+            } else if (obj != null && obj instanceof String) {
+                this.descriptionActivite = (String) obj;
+            }
+        }
+        if (soapObject.hasProperty("libelleCours")) {
+            java.lang.Object obj = soapObject.getProperty("libelleCours");
+            if (obj != null && obj.getClass().equals(SoapPrimitive.class)) {
+                SoapPrimitive j = (SoapPrimitive) obj;
+                if (j.toString() != null) {
+                    this.libelleCours = j.toString();
+                }
+            } else if (obj != null && obj instanceof String) {
+                this.libelleCours = (String) obj;
+            }
+        }
 
 
-  }
+    }
 
-  @Override
-  public java.lang.Object getProperty(int propertyIndex) {
-      //!!!!! If you have a compilation error here then you are using old version of ksoap2 library. Please upgrade to the latest version.
-      //!!!!! You can find a correct version in Lib folder from generated zip file!!!!!
-      if(propertyIndex==0)
-      {
-          return dateDebut;
-      }
-      if(propertyIndex==1)
-      {
-          return dateFin;
-      }
-      if(propertyIndex==2)
-      {
-          return coursGroupe;
-      }
-      if(propertyIndex==3)
-      {
-          return nomActivite;
-      }
-      if(propertyIndex==4)
-      {
-          return local;
-      }
-      if(propertyIndex==5)
-      {
-          return descriptionActivite;
-      }
-      if(propertyIndex==6)
-      {
-          return libelleCours;
-      }
-      return null;
-  }
+    @Override
+    public java.lang.Object getProperty(int propertyIndex) {
+        //!!!!! If you have a compilation error here then you are using old version of ksoap2 library. Please upgrade to the latest version.
+        //!!!!! You can find a correct version in Lib folder from generated zip file!!!!!
+        if (propertyIndex == 0) {
+            return dateDebut;
+        }
+        if (propertyIndex == 1) {
+            return dateFin;
+        }
+        if (propertyIndex == 2) {
+            return coursGroupe;
+        }
+        if (propertyIndex == 3) {
+            return nomActivite;
+        }
+        if (propertyIndex == 4) {
+            return local;
+        }
+        if (propertyIndex == 5) {
+            return descriptionActivite;
+        }
+        if (propertyIndex == 6) {
+            return libelleCours;
+        }
+        return null;
+    }
 
 
-  @Override
-  public int getPropertyCount() {
-      return 7;
-  }
+    @Override
+    public int getPropertyCount() {
+        return 7;
+    }
 
-  @Override
-  public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info)
-  {
-      if(propertyIndex==0)
-      {
-          info.type = PropertyInfo.STRING_CLASS;
-          info.name = "dateDebut";
-          info.namespace= "http://etsmtl.ca/";
-      }
-      if(propertyIndex==1)
-      {
-          info.type = PropertyInfo.STRING_CLASS;
-          info.name = "dateFin";
-          info.namespace= "http://etsmtl.ca/";
-      }
-      if(propertyIndex==2)
-      {
-          info.type = PropertyInfo.STRING_CLASS;
-          info.name = "coursGroupe";
-          info.namespace= "http://etsmtl.ca/";
-      }
-      if(propertyIndex==3)
-      {
-          info.type = PropertyInfo.STRING_CLASS;
-          info.name = "nomActivite";
-          info.namespace= "http://etsmtl.ca/";
-      }
-      if(propertyIndex==4)
-      {
-          info.type = PropertyInfo.STRING_CLASS;
-          info.name = "local";
-          info.namespace= "http://etsmtl.ca/";
-      }
-      if(propertyIndex==5)
-      {
-          info.type = PropertyInfo.STRING_CLASS;
-          info.name = "descriptionActivite";
-          info.namespace= "http://etsmtl.ca/";
-      }
-      if(propertyIndex==6)
-      {
-          info.type = PropertyInfo.STRING_CLASS;
-          info.name = "libelleCours";
-          info.namespace= "http://etsmtl.ca/";
-      }
-  }
-  
-  @Override
-  public void setProperty(int arg0, java.lang.Object arg1)
-  {
-  }
+    @Override
+    public void getPropertyInfo(int propertyIndex, @SuppressWarnings("rawtypes") Hashtable arg1, PropertyInfo info) {
+        if (propertyIndex == 0) {
+            info.type = PropertyInfo.STRING_CLASS;
+            info.name = "dateDebut";
+            info.namespace = "http://etsmtl.ca/";
+        }
+        if (propertyIndex == 1) {
+            info.type = PropertyInfo.STRING_CLASS;
+            info.name = "dateFin";
+            info.namespace = "http://etsmtl.ca/";
+        }
+        if (propertyIndex == 2) {
+            info.type = PropertyInfo.STRING_CLASS;
+            info.name = "coursGroupe";
+            info.namespace = "http://etsmtl.ca/";
+        }
+        if (propertyIndex == 3) {
+            info.type = PropertyInfo.STRING_CLASS;
+            info.name = "nomActivite";
+            info.namespace = "http://etsmtl.ca/";
+        }
+        if (propertyIndex == 4) {
+            info.type = PropertyInfo.STRING_CLASS;
+            info.name = "local";
+            info.namespace = "http://etsmtl.ca/";
+        }
+        if (propertyIndex == 5) {
+            info.type = PropertyInfo.STRING_CLASS;
+            info.name = "descriptionActivite";
+            info.namespace = "http://etsmtl.ca/";
+        }
+        if (propertyIndex == 6) {
+            info.type = PropertyInfo.STRING_CLASS;
+            info.name = "libelleCours";
+            info.namespace = "http://etsmtl.ca/";
+        }
+    }
+
+    @Override
+    public void setProperty(int arg0, java.lang.Object arg1) {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Seances) {
+            return ((Seances)o).id.equals(this.id);
+        }
+
+        return false;
+    }
 
 }

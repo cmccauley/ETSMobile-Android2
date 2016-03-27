@@ -25,6 +25,7 @@ import org.joda.time.DateTime;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -138,10 +139,10 @@ public class HoraireFragment extends HttpFragment implements Observer {
         horaireListView.setAdapter(seanceAdapter);
         listSeances = new ArrayList<TodayDataRowItem>();
 
-        try{
+        try {
             seanceAdapter.setItemList((ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryForAll());
             seanceAdapter.notifyDataSetChanged();
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -167,7 +168,7 @@ public class HoraireFragment extends HttpFragment implements Observer {
     public void onRequestFailure(SpiceException arg0) {
         progressBarSyncHoraire.setVisibility(ProgressBar.GONE);
 //        customProgressDialog.dismiss();
-        if(getActivity() != null)
+        if (getActivity() != null)
             Toast.makeText(getActivity(), getString(R.string.toast_Sync_Fail), Toast.LENGTH_SHORT).show();
     }
 
@@ -205,10 +206,12 @@ public class HoraireFragment extends HttpFragment implements Observer {
 //        customProgressDialog.dismiss();
         progressBarSyncHoraire.setVisibility(ProgressBar.GONE);
 
-        try{
-            seanceAdapter.setItemList((ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryForAll());
+        try {
+            List<Seances> seances = databaseHelper.getDao(Seances.class).queryForAll();
+
+            seanceAdapter.setItemList(seances);
             seanceAdapter.notifyDataSetChanged();
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
