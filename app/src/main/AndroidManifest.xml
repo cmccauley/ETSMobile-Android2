@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ca.etsmtl.applets.etsmobile2"
+    package="ca.etsmtl.applets.etsmobile"
     android:versionCode="2"
     android:versionName="2.0">
 
@@ -39,7 +39,7 @@
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.WRITE_CALL_LOG" />
 
-    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name="ca.etsmtl.applets.etsmobile.ApplicationManager"
@@ -199,6 +199,33 @@
             </intent-filter>
 
         </service>
+
+
+
+        <service android:name="ca.etsmtl.applets.etsmobile.service.BackgroundService" />
+
+        <receiver android:name="com.commonsware.cwac.wakeful.AlarmReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="com.commonsware.cwac.wakeful"
+                android:resource="@xml/wakeful" />
+        </receiver>
+        <receiver
+            android:name="ca.etsmtl.applets.etsmobile.service.ConnectivityReceiver"
+            android:enabled="false" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+
     </application>
 
 </manifest>

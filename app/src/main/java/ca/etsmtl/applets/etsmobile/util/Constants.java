@@ -24,4 +24,7 @@ public class Constants {
     public static final String EXP_DATE_COOKIE = "EXP_DATE_COOKIE";
     public static final String ALL_NOTIFS_LOADED = "ALL_NOTIFS_LOADED";
     public static final String RECEIVED_NOTIF = "RECEIVED_NOTIF";
+    public static final String CALENDAR_ID = "CALENDAR_ID";
+    public static final String SELECTED_ACCOUNT = "SELECTED_ACCOUNT";
+    public static final int REQUEST_ACCOUNT_PICKER = 2;
 }

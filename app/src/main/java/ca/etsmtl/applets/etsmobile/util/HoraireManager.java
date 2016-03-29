@@ -30,7 +30,6 @@ public class HoraireManager extends Observable implements RequestListener<Object
 
     private String calendarName = "Mes cours";
     DatabaseHelper databaseHelper;
-    Dao<HoraireActivite, ?> daoDesActivitesEtProf;
     Dao<JoursRemplaces, ?> daoJoursRemplaces;
     Dao<Seances, ?> daoSeances;
 
@@ -39,7 +38,6 @@ public class HoraireManager extends Observable implements RequestListener<Object
         this.activity = activity;
         databaseHelper = new DatabaseHelper(activity);
         try {
-            daoDesActivitesEtProf = databaseHelper.getDao(HoraireActivite.class);
             daoJoursRemplaces = databaseHelper.getDao(JoursRemplaces.class);
             daoSeances = databaseHelper.getDao(Seances.class);
         } catch (SQLException e) {
@@ -106,7 +104,8 @@ public class HoraireManager extends Observable implements RequestListener<Object
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
 
-                if (syncJoursRemplacesEnded && syncSeancesEnded && syncEventListEnded) {
+//                if (syncJoursRemplacesEnded && syncSeancesEnded && syncEventListEnded) {
+                if(syncEventListEnded) {
                     HoraireManager.this.setChanged();
                     HoraireManager.this.notifyObservers();
                 }
