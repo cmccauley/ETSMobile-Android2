@@ -15,7 +15,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import ca.etsmtl.applets.etsmobile.model.EventList;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 
 public class AppletsApiCalendarRequest extends SpringAndroidSpiceRequest<EventList> {

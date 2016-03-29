@@ -24,7 +24,7 @@ import java.io.IOException;
 import ca.etsmtl.applets.etsmobile.ui.activity.MainActivity;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Constants;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 public class AboutFragment extends WebFragment {
 

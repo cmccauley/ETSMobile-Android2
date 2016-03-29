@@ -12,7 +12,7 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import ca.etsmtl.applets.etsmobile.ui.activity.NotesDetailsActivity;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 public class NoteAdapter extends ArrayAdapter<NotesSessionItem> {
 

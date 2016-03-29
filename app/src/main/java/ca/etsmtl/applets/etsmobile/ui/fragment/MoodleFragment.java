@@ -30,7 +30,7 @@ import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.CourseComparator;
 import ca.etsmtl.applets.etsmobile.util.SeanceComparator;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 /**
  * Interacts with Moodle API

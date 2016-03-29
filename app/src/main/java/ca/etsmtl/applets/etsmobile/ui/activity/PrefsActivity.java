@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 /**
  * Created by gnut3ll4 on 12/14/14.

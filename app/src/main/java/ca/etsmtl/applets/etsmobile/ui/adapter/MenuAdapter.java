@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.Locale;
 
 import ca.etsmtl.applets.etsmobile.model.MyMenuItem;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 public class MenuAdapter extends ArrayAdapter<MyMenuItem> {
 

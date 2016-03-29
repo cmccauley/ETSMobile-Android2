@@ -33,7 +33,7 @@ import java.util.concurrent.Executors;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.util.Constants;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 public class RegistrationIntentService extends IntentService {
 

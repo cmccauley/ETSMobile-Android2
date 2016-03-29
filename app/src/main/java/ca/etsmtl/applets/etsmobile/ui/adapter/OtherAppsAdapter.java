@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import ca.etsmtl.applets.etsmobile.model.Apps;
 import ca.etsmtl.applets.etsmobile.model.Nouvelle;
 import ca.etsmtl.applets.etsmobile.util.Utility;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 /**
  * Created by gnut3ll4 on 18/05/15.

@@ -25,7 +25,7 @@ import ca.etsmtl.applets.etsmobile.ui.adapter.NotificationsAdapter;
 import ca.etsmtl.applets.etsmobile.util.Constants;
 import ca.etsmtl.applets.etsmobile.util.SecurePreferences;
 import ca.etsmtl.applets.etsmobile.util.Utility;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 /**
  * Created by gnut3ll4 on 15/12/15.

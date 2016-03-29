@@ -20,7 +20,7 @@ import java.util.Iterator;
 
 import ca.etsmtl.applets.etsmobile.model.Sponsor;
 import ca.etsmtl.applets.etsmobile.model.SponsorList;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 public class AppletsApiSponsorRequest extends SpringAndroidSpiceRequest<SponsorList> {
 

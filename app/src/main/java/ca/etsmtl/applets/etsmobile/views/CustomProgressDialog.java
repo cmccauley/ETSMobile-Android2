@@ -1,6 +1,6 @@
 package ca.etsmtl.applets.etsmobile.views;
 
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 import android.app.ActionBar.LayoutParams;
 import android.app.Dialog;
 import android.content.Context;

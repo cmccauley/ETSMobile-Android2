@@ -36,7 +36,7 @@ import ca.etsmtl.applets.etsmobile.ui.activity.NewsDetailsActivity;
 import ca.etsmtl.applets.etsmobile.ui.activity.PrefsActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NewsAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 
 public class NewsFragment extends HttpFragment {

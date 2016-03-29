@@ -24,7 +24,7 @@ import ca.etsmtl.applets.etsmobile.model.ListeDesElementsEvaluation;
 import ca.etsmtl.applets.etsmobile.ui.adapter.MyCourseDetailAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.NoteManager;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 

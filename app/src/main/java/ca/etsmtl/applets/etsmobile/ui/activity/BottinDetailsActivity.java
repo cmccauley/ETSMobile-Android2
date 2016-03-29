@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import ca.etsmtl.applets.etsmobile.ui.fragment.BottinDetailsFragment;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 /**
  * Created by gnut3ll4 on 12/19/14.

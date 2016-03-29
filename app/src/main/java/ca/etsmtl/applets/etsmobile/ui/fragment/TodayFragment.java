@@ -35,7 +35,7 @@ import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.HoraireManager;
 import ca.etsmtl.applets.etsmobile.util.SeanceComparator;
 import ca.etsmtl.applets.etsmobile.util.Utility;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 public class TodayFragment extends HttpFragment implements Observer {
 

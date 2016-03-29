@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 import ca.etsmtl.applets.etsmobile.model.Event;
 import ca.etsmtl.applets.etsmobile.model.Seances;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 /**
  * Created by laurencedevillers on 14-10-22.

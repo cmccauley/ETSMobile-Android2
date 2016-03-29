@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 public class BottinDetailsFragment extends HttpFragment {
 

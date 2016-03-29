@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ca.etsmtl.applets.etsmobile.views.LoadingView;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 /**
  * Base fragment

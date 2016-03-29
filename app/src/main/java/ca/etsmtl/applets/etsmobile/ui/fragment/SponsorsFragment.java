@@ -25,7 +25,7 @@ import ca.etsmtl.applets.etsmobile.ui.adapter.SponsorAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.SponsorManager;
 import ca.etsmtl.applets.etsmobile.views.LoadingView;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 public class SponsorsFragment extends HttpFragment implements Observer {
 

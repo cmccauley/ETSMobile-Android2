@@ -20,7 +20,7 @@ import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.model.MonETSNotificationList;
 import ca.etsmtl.applets.etsmobile.util.Constants;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 /**
  * Created by gnut3ll4 on 15/12/15.

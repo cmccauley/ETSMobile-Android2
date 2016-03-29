@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
 

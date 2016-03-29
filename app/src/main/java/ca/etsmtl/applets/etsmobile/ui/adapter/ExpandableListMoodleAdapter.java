@@ -14,7 +14,7 @@ import java.util.List;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCoreModule;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleModuleContent;
 import ca.etsmtl.applets.etsmobile.ui.fragment.MoodleCourseDetailsFragment;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 /**
  * Created by gnut3ll4 on 10/30/14.

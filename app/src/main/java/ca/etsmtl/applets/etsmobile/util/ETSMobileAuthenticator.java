@@ -27,7 +27,7 @@ import java.util.Date;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
 import ca.etsmtl.applets.etsmobile.service.RegistrationIntentService;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 import static android.accounts.AccountManager.KEY_BOOLEAN_RESULT;
 

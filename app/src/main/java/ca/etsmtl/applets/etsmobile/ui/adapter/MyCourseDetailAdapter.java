@@ -11,7 +11,7 @@ import java.util.Locale;
 
 import ca.etsmtl.applets.etsmobile.model.ElementEvaluation;
 import ca.etsmtl.applets.etsmobile.model.ListeDesElementsEvaluation;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 import android.content.Context;
 import android.graphics.Color;

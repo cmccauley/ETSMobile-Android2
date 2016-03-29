@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import ca.etsmtl.applets.etsmobile.ui.activity.UrgenceActivity;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 public class SecuriteFragment extends BaseFragment {
 	

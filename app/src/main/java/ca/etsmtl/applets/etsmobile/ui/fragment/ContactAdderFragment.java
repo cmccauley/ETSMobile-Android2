@@ -30,7 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 import ca.etsmtl.applets.etsmobile.model.FicheEmploye;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 public class ContactAdderFragment extends HttpFragment implements
 		OnAccountsUpdateListener {

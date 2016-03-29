@@ -21,7 +21,7 @@ import ca.etsmtl.applets.etsmobile.model.listeDesProgrammes;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ProfileAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.ProfilManager;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 /**
  * @author Philippe, Laurence

@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 import ca.etsmtl.applets.etsmobile.model.Apps;
 import ca.etsmtl.applets.etsmobile.ui.adapter.OtherAppsAdapter;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 public class OtherAppsFragment extends WebFragment {
 

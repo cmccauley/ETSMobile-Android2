@@ -36,7 +36,7 @@ import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleCoreModule;
 import ca.etsmtl.applets.etsmobile.model.Moodle.MoodleModuleContent;
 import ca.etsmtl.applets.etsmobile.ui.adapter.ExpandableListMoodleSectionAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 /**
  * Displays downloadable resources for a Moodle course

@@ -11,7 +11,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.views.LoadingView;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 /**
  * Base implementation for fragments that use the network

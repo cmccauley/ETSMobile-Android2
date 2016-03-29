@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import ca.etsmtl.applets.etsmobile.model.Nouvelle;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 /**
  * Created by gnut3ll4 on 12/12/14.

@@ -1,6 +1,6 @@
 package ca.etsmtl.applets.etsmobile.model;
 
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 /**
  * Created by Phil on 17/11/13.

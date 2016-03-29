@@ -20,7 +20,7 @@ import java.util.Locale;
 
 import ca.etsmtl.applets.etsmobile.model.Seances;
 import ca.etsmtl.applets.etsmobile.util.SeanceComparator;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 public class SeanceAdapter extends BaseAdapter {
 

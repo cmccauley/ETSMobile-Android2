@@ -23,7 +23,7 @@ import java.io.OutputStream;
 import java.util.List;
 
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 import android.app.ActionBar;
 import android.app.Activity;

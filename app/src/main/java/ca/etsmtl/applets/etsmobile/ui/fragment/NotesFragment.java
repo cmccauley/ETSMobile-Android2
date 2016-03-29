@@ -31,7 +31,7 @@ import ca.etsmtl.applets.etsmobile.ui.adapter.SessionCoteItem;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.NoteManager;
 import ca.etsmtl.applets.etsmobile.views.LoadingView;
-import ca.etsmtl.applets.etsmobile2.R;
+import ca.etsmtl.applets.etsmobile.R;
 
 /**
  * Created by Laurence
