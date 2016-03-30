@@ -87,6 +87,7 @@ public class BackgroundService extends WakefulIntentService implements RequestLi
         HttpTransport transport = AndroidHttp.newCompatibleTransport();
         JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
         GoogleAccountCredential credential;
+        SecurePreferences securePreferences = new SecurePreferences(this);
 
         databaseHelper = new DatabaseHelper(this);
         try {
@@ -95,18 +96,12 @@ public class BackgroundService extends WakefulIntentService implements RequestLi
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        String possibleEmail = "";
-        Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
-        Account[] accounts = AccountManager.get(this).getAccountsByType("com.google");
-        for (Account account : accounts) {
-            if (emailPattern.matcher(account.name).matches()) {
-                possibleEmail = account.name;
 
-            }
-        }
+        String selectedAccount = securePreferences.getString(Constants.SELECTED_ACCOUNT, "");
+
 
         credential = GoogleAccountCredential.usingOAuth2(getApplicationContext(), Collections.singleton(CalendarScopes.CALENDAR));
-        credential.setSelectedAccountName("primary");
+        credential.setSelectedAccountName(selectedAccount);
 
         client = new Calendar.Builder(transport, jsonFactory, credential)
                 .setApplicationName("Google-CalendarAndroidSample/1.0")
@@ -121,18 +116,18 @@ public class BackgroundService extends WakefulIntentService implements RequestLi
         SignetsMobileSoap signetsMobileSoap = new SignetsMobileSoap();
 
         //Checking if calendar exists and create it if not
-        SecurePreferences securePreferences = new SecurePreferences(this);
-
-        calendarId = securePreferences.getString(Constants.CALENDAR_ID, "");
-        try {
-            if (calendarId.isEmpty()) {
-                com.google.api.services.calendar.model.Calendar calendar = new com.google.api.services.calendar.model.Calendar();
-                calendar.setSummary("Mes cours ÉTS");
-                calendarId = client.calendars().insert(calendar).execute().getId();
-                securePreferences.edit().putString(Constants.CALENDAR_ID, calendarId).commit();
+        if (!selectedAccount.isEmpty()) {
+            calendarId = securePreferences.getString(Constants.CALENDAR_ID, "");
+            try {
+                if (calendarId.isEmpty()) {
+                    com.google.api.services.calendar.model.Calendar calendar = new com.google.api.services.calendar.model.Calendar();
+                    calendar.setSummary("Mes cours ÉTS");
+                    calendarId = client.calendars().insert(calendar).execute().getId();
+                    securePreferences.edit().putString(Constants.CALENDAR_ID, calendarId).commit();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
         //Inserting JoursRemplaces in local calendar
@@ -241,17 +236,11 @@ public class BackgroundService extends WakefulIntentService implements RequestLi
                         .flatMap(Observable::from)
                         .flatMap(seance -> {
                             try {
-                                //todo remove?
-                                seance.id = seance.coursGroupe +
-                                        seance.dateDebut +
-                                        seance.dateFin +
-                                        seance.local;
-
                                 Event event = new Event();
                                 String encodedId = BaseEncoding.base32Hex()
                                         .encode(seance.id.getBytes())
                                         .toLowerCase()
-                                        .replace("=","");
+                                        .replace("=", "");
                                 event.setId(encodedId);
                                 event.setSummary(seance.descriptionActivite.equals("Examen final") ? "Examen final " + seance.coursGroupe : seance.coursGroupe);
                                 event.setLocation(seance.local);

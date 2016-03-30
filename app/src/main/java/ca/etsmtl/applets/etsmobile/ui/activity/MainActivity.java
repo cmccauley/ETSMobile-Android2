@@ -190,12 +190,19 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
 
+        String selectedAccount = securePreferences.getString(Constants.SELECTED_ACCOUNT, "");
+        if(selectedAccount.isEmpty()) {
+            selectAccount();
+        }
+
+
         //In case of : retry registering to GCM
         if (!isGCMTokenSent && ApplicationManager.domaine != null) {
             // Start IntentService to register this application with GCM.
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
         }
+
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(Constants.REGISTRATION_COMPLETE));
@@ -211,6 +218,7 @@ public class MainActivity extends Activity {
                 selectItem(mfragment.getTag());
             }
         } else {
+            //If already logged on
             if (mfragment == null) {
                 selectItem(TodayFragment.class.getName());
             }
@@ -280,11 +288,12 @@ public class MainActivity extends Activity {
 
         if (requestCode == Constants.REQUEST_CODE_EMAIL && resultCode == RESULT_OK) {
             String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+            securePreferences.edit().putString(Constants.SELECTED_ACCOUNT, accountName).commit();
 
             User user = User.getCurrentUser();
             user.setEmail(accountName);
 
-            ConversationActivity.show(this);
+
 
         }
     }
@@ -364,7 +373,7 @@ public class MainActivity extends Activity {
 
             if (myMenuItem.resId == R.drawable.ic_ico_comment) {
                 // Opens SupportKit with selected user account
-                selectAccount();
+                ConversationActivity.show(MainActivity.this);
             } else {
                 selectItem(myMenuItem.mClass.getName());
             }
