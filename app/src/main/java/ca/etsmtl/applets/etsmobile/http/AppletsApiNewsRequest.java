@@ -68,8 +68,8 @@ public class AppletsApiNewsRequest extends SpringAndroidSpiceRequest<Nouvelles> 
             ObjectMapper mapper = new ObjectMapper();
             nouvelles = new Nouvelles();
 
-                Iterator keys = data.keys();
-                while (keys.hasNext()) {
+            Iterator keys = data.keys();
+            while (keys.hasNext()) {
 
                 int imageResource = 0;
                 String currentDynamicKey = (String) keys.next();
@@ -83,11 +83,10 @@ public class AppletsApiNewsRequest extends SpringAndroidSpiceRequest<Nouvelles> 
                     nouvelle.setImageResource(imageResource);
                     nouvelles.add(nouvelle);
                 }
-                    Log.d("Nouvelles", TextUtils.join(",", nouvelles));
+                Log.d("Nouvelles", TextUtils.join(",", nouvelles));
             }
 
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 

@@ -20,7 +20,7 @@ public class DailyListener implements WakefulIntentService.AlarmListener {
     public static final long INTERVAL_SYNC = AlarmManager.INTERVAL_HOUR;
 
     public void scheduleAlarms(AlarmManager mgr, PendingIntent pi, Context context) {
-        // register when enabled in preferences
+        // register when enabled in news_preferences
 
         Log.i("DailyListener", "Schedule update check...");
 

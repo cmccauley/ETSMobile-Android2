@@ -19,10 +19,7 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -33,7 +30,7 @@ import ca.etsmtl.applets.etsmobile.http.AppletsApiNewsRequest;
 import ca.etsmtl.applets.etsmobile.model.Nouvelle;
 import ca.etsmtl.applets.etsmobile.model.Nouvelles;
 import ca.etsmtl.applets.etsmobile.ui.activity.NewsDetailsActivity;
-import ca.etsmtl.applets.etsmobile.ui.activity.PrefsActivity;
+import ca.etsmtl.applets.etsmobile.ui.activity.NewsPrefsActivity;
 import ca.etsmtl.applets.etsmobile.ui.adapter.NewsAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.R;
@@ -118,7 +115,7 @@ public class NewsFragment extends HttpFragment {
             case R.id.menu_item_sources_news:
 
                 // Display the fragment as the main content.
-                Intent i = new Intent(getActivity(), PrefsActivity.class);
+                Intent i = new Intent(getActivity(), NewsPrefsActivity.class);
 
                 getActivity().startActivity(i);
 

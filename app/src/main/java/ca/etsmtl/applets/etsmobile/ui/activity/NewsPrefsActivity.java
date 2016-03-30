@@ -16,7 +16,7 @@ import ca.etsmtl.applets.etsmobile.R;
 /**
  * Created by gnut3ll4 on 12/14/14.
  */
-public class PrefsActivity extends PreferenceActivity {
+public class NewsPrefsActivity extends PreferenceActivity {
     @Override
     public void onBackPressed() {
         this.finish();
@@ -28,7 +28,7 @@ public class PrefsActivity extends PreferenceActivity {
 
         getFragmentManager().beginTransaction().replace(android.R.id.content, new PrefsFragment(),PrefsFragment.class.getName()).commit();//.addToBackStack(null).commit();
 
-        setTitle("Préférences");
+        setTitle(getString(R.string.action_preferences));
 
     }
 
@@ -44,7 +44,7 @@ public class PrefsActivity extends PreferenceActivity {
     }
 
     /**
-     * This fragment shows the preferences for the first header.
+     * This fragment shows the news_preferences for the first header.
      */
     public static class PrefsFragment extends PreferenceFragment {
 
@@ -55,7 +55,7 @@ public class PrefsActivity extends PreferenceActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
-            addPreferencesFromResource(R.xml.preferences);
+            addPreferencesFromResource(R.xml.news_preferences);
             
             String[] selections = getResources().getStringArray(R.array.sources_news_values);
             Set<String> selectionSet = new HashSet<String>();
@@ -78,7 +78,7 @@ public class PrefsActivity extends PreferenceActivity {
             // SharedPreferences wherever they are needed.
 //            PreferenceManager.setDefaultValues(getActivity(),R.xml.advanced_preferences, false);
 
-            // Load the preferences from an XML resource
+            // Load the news_preferences from an XML resource
 
         }
 

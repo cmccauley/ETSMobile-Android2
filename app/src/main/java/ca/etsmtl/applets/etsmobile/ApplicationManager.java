@@ -14,6 +14,7 @@ import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.commonsware.cwac.wakeful.WakefulIntentService;
 import com.crashlytics.android.Crashlytics;
 
 import java.sql.SQLException;
@@ -118,6 +119,7 @@ public class ApplicationManager extends Application {
         }
 
         ApplicationManager.userCredentials = null;
+        WakefulIntentService.cancelAlarms(activity);
         Intent intent = new Intent(activity, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         activity.startActivity(intent);
@@ -128,6 +130,7 @@ public class ApplicationManager extends Application {
                 activity.finish();
             }
         }).start();
+
 
     }
 
