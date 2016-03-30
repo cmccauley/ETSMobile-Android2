@@ -222,7 +222,7 @@ public class LoginActivity extends AccountAuthenticatorActivity implements Reque
                         ApplicationManager.userCredentials.getPassword());
 
                 //Start auto syncing of Seances and JoursRemplaces
-                WakefulIntentService.scheduleAlarms(new DailyListener(), this, false);
+                WakefulIntentService.scheduleAlarms(new DailyListener(), this, true);
 
                 finishActivity(1);
             }
