@@ -23,7 +23,7 @@ public class Synchronizer<T> {
         }
 
         try {
-            // Deletes entries in DB that doesn't exist on API
+            // Deletes entries in DB that don't exist on API
             List<T> localObjects = dao.queryForAll();
             for (T localObject : localObjects) {
                 if (!remoteObjects.contains(localObject)) {

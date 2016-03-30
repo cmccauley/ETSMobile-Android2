@@ -16,6 +16,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarRequestInitializer;
 import com.google.api.services.calendar.CalendarScopes;
+import com.google.api.services.calendar.model.CalendarListEntry;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 import com.google.common.base.Predicate;
@@ -40,6 +41,7 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
+import ca.etsmtl.applets.etsmobile.R;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.http.soap.SignetsMobileSoap;
@@ -113,10 +115,23 @@ public class BackgroundService extends WakefulIntentService {
             calendarId = securePreferences.getString(Constants.CALENDAR_ID, "");
             try {
                 if (calendarId.isEmpty()) {
-                    com.google.api.services.calendar.model.Calendar calendar = new com.google.api.services.calendar.model.Calendar();
-                    calendar.setSummary("Mes cours ÉTS");
-                    calendarId = client.calendars().insert(calendar).execute().getId();
-                    securePreferences.edit().putString(Constants.CALENDAR_ID, calendarId).commit();
+                    //If calendar exists on Google, we pick it.
+                    List<CalendarListEntry> items = client.calendarList().list().execute().getItems();
+                    for (CalendarListEntry item : items) {
+                        if (item.getSummary().equals(getResources().getString(R.string.etsmobile_calendar))) {
+                            calendarId = item.getId();
+                            securePreferences.edit().putString(Constants.CALENDAR_ID, calendarId).commit();
+                        }
+                    }
+
+                    //Else, we create it.
+                    if (calendarId.isEmpty()) {
+                        com.google.api.services.calendar.model.Calendar calendar = new com.google.api.services.calendar.model.Calendar();
+                        calendar.setSummary(getResources().getString(R.string.etsmobile_calendar));
+                        calendarId = client.calendars().insert(calendar).execute().getId();
+                        securePreferences.edit().putString(Constants.CALENDAR_ID, calendarId).commit();
+
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -185,6 +200,7 @@ public class BackgroundService extends WakefulIntentService {
                             }
                         });
 
+        //Getting and syncing in DB Seances from Signets
         Observable<Event> eventSeancesObservable =
                 Observable.just(signetsMobileSoap)
                         .flatMap(signetsMobileSoap1 -> {
@@ -253,11 +269,13 @@ public class BackgroundService extends WakefulIntentService {
                         });
 
 
+        //Merging list of calendar events (JoursRemplaces + Seances)
         Observable<List<GoogleEventWrapper>> remoteEventsSignets =
                 Observable.merge(eventJoursRemplacesObservable, eventSeancesObservable)
                         .flatMap(event -> Observable.just(new GoogleEventWrapper(event)))
                         .toList();
 
+        //Getting already created events in Google calendar
         Observable<List<GoogleEventWrapper>> localEventsGoogle = Observable.just(client.events())
                 .flatMap(events1 -> {
                     try {
@@ -270,17 +288,19 @@ public class BackgroundService extends WakefulIntentService {
                 .toList();
 
 
+        //Syncing between Google calendar and Signets (updating Google calendar)
         Observable.zip(localEventsGoogle, remoteEventsSignets,
                 (localEvents, remoteEvents) -> {
 
                     try {
+                        // Deletes entries in Google Calendar that don't exist on API
                         for (GoogleEventWrapper localObject : localEvents) {
                             if (!remoteEvents.contains(localObject)) {
                                 client.events().delete(calendarId, localObject.getEvent().getId()).execute();
                             }
                         }
 
-                        // Adds new API entries on DB or updates existing ones
+                        // Adds new API entries on Google Calendar or updates existing ones
                         for (GoogleEventWrapper remoteObject : remoteEvents) {
                             try {
                                 client.events().get(calendarId, remoteObject.getEvent().getId()).execute();
@@ -293,11 +313,10 @@ public class BackgroundService extends WakefulIntentService {
                         }
 
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        return Observable.error(e);
                     }
-
-
                     return null;
+
                 })
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())

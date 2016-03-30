@@ -22,13 +22,14 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
-import ca.etsmtl.applets.etsmobile.R;
 import ca.etsmtl.applets.etsmobile.http.AuthentificationPortailTask;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
 import ca.etsmtl.applets.etsmobile.model.Etudiant;
 import ca.etsmtl.applets.etsmobile.model.UserCredentials;
+import ca.etsmtl.applets.etsmobile.service.BackgroundService;
 import ca.etsmtl.applets.etsmobile.service.DailyListener;
 import ca.etsmtl.applets.etsmobile.util.Constants;
+import ca.etsmtl.applets.etsmobile.R;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
