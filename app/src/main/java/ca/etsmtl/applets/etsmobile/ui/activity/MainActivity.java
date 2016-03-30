@@ -307,6 +307,11 @@ public class MainActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        if(id == R.id.action_preferences) {
+            // Display the fragment as the main content.
+            Intent i = new Intent(this, PrefsActivity.class);
+            startActivity(i);
+        }
         if (id == R.id.action_logout) {
             ApplicationManager.deconnexion(this);
         }

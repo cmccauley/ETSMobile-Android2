@@ -277,5 +277,8 @@
     <string name="notification_content_title">%1$s nouvelle%2$s notification%3$s</string>
     <string name="others_notifications">+ %1$s autre%2$s</string>
     <string name="etsmobile_calendar">ÉTSMobile Calendar</string>
+    <string name="action_preferences">Préférences</string>
+    <string name="pref_notification_courses">Notifications de cours</string>
+    <string name="preference_key">pref_notification_courses</string>
 
 </resources>

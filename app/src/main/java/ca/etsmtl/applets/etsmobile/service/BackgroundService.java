@@ -3,6 +3,8 @@ package ca.etsmtl.applets.etsmobile.service;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.Patterns;
 
@@ -18,7 +20,9 @@ import com.google.api.services.calendar.CalendarRequestInitializer;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.CalendarListEntry;
 import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.EventDateTime;
+import com.google.api.services.calendar.model.EventReminder;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
 import com.google.common.io.BaseEncoding;
@@ -34,6 +38,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -261,6 +266,20 @@ public class BackgroundService extends WakefulIntentService {
 
                                 event.setStart(eventStartDateTime);
                                 event.setEnd(eventEndDateTime);
+
+                                SharedPreferences defaultSharedPreferences = PreferenceManager
+                                        .getDefaultSharedPreferences(this);
+                                boolean activateNotifications = defaultSharedPreferences
+                                        .getBoolean(getString(R.string.preference_key), true);
+                                if (activateNotifications) {
+                                    EventReminder[] reminderOverrides = new EventReminder[] {
+                                            new EventReminder().setMethod("popup").setMinutes(30),
+                                    };
+                                    Event.Reminders reminders = new Event.Reminders()
+                                            .setUseDefault(false)
+                                            .setOverrides(Arrays.asList(reminderOverrides));
+                                    event.setReminders(reminders);
+                                }
 
                                 return Observable.just(event);
                             } catch (ParseException e) {

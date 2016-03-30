@@ -117,7 +117,17 @@
                 android:value="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" />
         </activity>
         <activity
-            android:name="ca.etsmtl.applets.etsmobile.ui.activity.PrefsActivity"
+            android:name=".ui.activity.NewsPrefsActivity"
+            android:label="PrefsActivity"
+            android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.activity.PrefsActivity"
             android:label="PrefsActivity"
             android:parentActivityName="ca.etsmtl.applets.etsmobile.ui.activity.MainActivity"
             android:screenOrientation="portrait">
