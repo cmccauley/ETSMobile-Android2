@@ -104,11 +104,14 @@ public class HoraireManager extends Observable implements RequestListener<Object
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
 
-//                if (syncJoursRemplacesEnded && syncSeancesEnded && syncEventListEnded) {
-                if(syncEventListEnded) {
-                    HoraireManager.this.setChanged();
-                    HoraireManager.this.notifyObservers();
+                if (syncJoursRemplacesEnded && syncSeancesEnded && syncEventListEnded) {
+                    SecurePreferences securePreferences = new SecurePreferences(activity);
+                    if (securePreferences.getBoolean(Constants.FIRST_LOGIN, true)) {
+                        securePreferences.edit().putBoolean(Constants.FIRST_LOGIN, false).commit();
+                    }
                 }
+                HoraireManager.this.setChanged();
+                HoraireManager.this.notifyObservers();
             }
         }.execute();
 
