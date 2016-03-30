@@ -10,26 +10,22 @@ package ca.etsmtl.applets.etsmobile.model;
 //---------------------------------------------------
 
 
-import android.text.TextUtils;
+import com.google.android.gms.wearable.DataMap;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 
-import java.util.Hashtable;
-
-import org.joda.time.DateTime;
 import org.ksoap2.serialization.AttributeContainer;
 import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 
-import com.google.android.gms.wearable.DataMap;
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
+import java.util.Hashtable;
 
 import ca.etsmtl.applets.etsmobile.http.soap.ExtendedSoapSerializationEnvelope;
-import ca.etsmtl.applets.etsmobile.http.soap.Helper;
 
 @DatabaseTable(tableName = "seances")
-public class Seances extends AttributeContainer implements KvmSerializable {
+public class Seances extends AttributeContainer implements KvmSerializable, IHoraireRows {
 
     @DatabaseField
     public String dateDebut;
@@ -78,6 +74,15 @@ public class Seances extends AttributeContainer implements KvmSerializable {
         map.putString("descriptionActivite", descriptionActivite);
         map.putString("libelleCours", libelleCours);
         return map;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Seances) {
+            return ((Seances) o).id.equals(this.id);
+        }
+
+        return false;
     }
 
     public Seances(AttributeContainer inObj, ExtendedSoapSerializationEnvelope envelope) {
@@ -242,16 +247,17 @@ public class Seances extends AttributeContainer implements KvmSerializable {
     }
 
     @Override
-    public void setProperty(int arg0, java.lang.Object arg1) {
+    public String getDateDebut() {
+        return dateDebut;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o instanceof Seances) {
-            return ((Seances)o).id.equals(this.id);
-        }
+    public String getDateFin() {
+        return dateFin;
+    }
 
-        return false;
+    @Override
+    public void setProperty(int arg0, java.lang.Object arg1) {
     }
 
 }

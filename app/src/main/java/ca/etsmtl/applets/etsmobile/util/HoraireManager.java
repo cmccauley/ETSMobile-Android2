@@ -2,6 +2,7 @@ package ca.etsmtl.applets.etsmobile.util;
 
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -15,6 +16,7 @@ import java.util.Observable;
 
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.model.Event;
+import ca.etsmtl.applets.etsmobile.model.EventList;
 import ca.etsmtl.applets.etsmobile.model.HoraireActivite;
 import ca.etsmtl.applets.etsmobile.model.JoursRemplaces;
 import ca.etsmtl.applets.etsmobile.model.Seances;
@@ -84,18 +86,16 @@ public class HoraireManager extends Observable implements RequestListener<Object
                     syncSeancesEnded = true;
                 }
 
-                //Calendar ApplETS API with ETS
-                syncEventListEnded = true;
-                /*todo
+                // ETS Calendar Events
                 if (o instanceof EventList) {
-                    EventList eventList = (EventList) o;
 
                     //Synchronizer
                     //Don't forget to override "equals" method in Event class to auto sync on id
-
+                    
+                    deleteExpiredEvent((EventList) o);
+                    createOrUpdateEventListInBD((EventList) o);
                     syncEventListEnded = true;
                 }
-                //*/
 
                 return null;
             }
@@ -117,6 +117,50 @@ public class HoraireManager extends Observable implements RequestListener<Object
 
     }
 
+    /**
+     * Deletes entries in DB that doesn't exist on API
+     *
+     * @param
+     */
+    private void deleteExpiredEvent(EventList envEventList) {
+
+        DatabaseHelper dbHelper = new DatabaseHelper(activity);
+
+        ArrayList<Event> dbEvents = new ArrayList<Event>();
+        try {
+            dbEvents = (ArrayList<Event>) dbHelper.getDao(Event.class).queryForAll();
+            for (Event eventsNew : dbEvents) {
+
+                if (!dbEvents.contains(eventsNew.getId())) {
+                    Dao<Event, String> eventDao = dbHelper.getDao(Event.class);
+                    eventDao.deleteById(eventsNew.getId());
+                    Log.v("Supression", eventsNew.getId() + " supprimé");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Adds new API entries on DB or updates existing ones
+     *
+     * @param eventList
+     */
+    private void createOrUpdateEventListInBD(EventList eventList) {
+        DatabaseHelper dbHelper = new DatabaseHelper(activity);
+
+        try {
+            for (Event event : eventList) {
+                dbHelper.getDao(Event.class).createOrUpdate(event);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    
     public void updateCalendar() throws Exception {
 
         DatabaseHelper dbHelper = new DatabaseHelper(activity);
@@ -167,8 +211,8 @@ public class HoraireManager extends Observable implements RequestListener<Object
                     "",
                     ""
                     ,
-                    joursRemplacesFormatter.parse(event.getStartDate()),
-                    joursRemplacesFormatter.parse(event.getEndDate()));
+                    joursRemplacesFormatter.parse(event.getDateDebut()),
+                    joursRemplacesFormatter.parse(event.getDateFin()));
         }
 
 
