@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.webkit.URLUtil;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -18,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.AppletsApiSponsorRequest;
 import ca.etsmtl.applets.etsmobile.model.Sponsor;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SponsorAdapter;
@@ -67,8 +65,9 @@ public class SponsorsFragment extends HttpFragment implements Observer {
                     LoadingView.hideLoadingView(loadingView);
                 }
             });
+            Toast.makeText(getActivity(), getString(R.string.toast_Sync_Fail), Toast.LENGTH_SHORT).show();
         }
-        Toast.makeText(getActivity(), getString(R.string.toast_Sync_Fail), Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
