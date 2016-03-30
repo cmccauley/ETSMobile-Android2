@@ -42,9 +42,8 @@ android {
         applicationId "ca.etsmtl.applets.etsmobile"
         minSdkVersion 15
         targetSdkVersion 22
-//        todo restore version
-        versionCode 18
-        versionName "2.07"
+        versionCode 17
+        versionName "2.06"
         multiDexEnabled true
     }
 
