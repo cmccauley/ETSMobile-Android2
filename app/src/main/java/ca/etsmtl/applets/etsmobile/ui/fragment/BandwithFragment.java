@@ -51,7 +51,6 @@ import ca.etsmtl.applets.etsmobile.ui.adapter.LegendAdapter;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.views.MultiColorProgressBar;
-import ca.etsmtl.applets.etsmobile.views.PieChart;
 import ca.etsmtl.applets.etsmobile.views.ProgressItem;
 import ca.etsmtl.applets.etsmobile.R;
 import lecho.lib.hellocharts.model.PieChartData;

@@ -25,6 +25,9 @@ allprojects {
         maven {
             url "https://s3.amazonaws.com/repo.commonsware.com"
         }
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/ksoap2-android-releases/'
+        }
         jcenter()
     }
 }

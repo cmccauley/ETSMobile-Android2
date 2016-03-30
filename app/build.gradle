@@ -54,6 +54,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
 }
 
 dependencies {
@@ -93,4 +97,10 @@ dependencies {
     compile 'io.reactivex:rxjava:1.1.0'
     compile 'io.reactivex:rxandroid:1.1.0'
     compile 'com.commonsware.cwac:wakeful:1.0.2'
+
+    compile 'com.google.code.ksoap2-android:ksoap2-android:3.5.0'
+    compile 'com.j256.ormlite:ormlite-core:4.48'
+    compile 'com.j256.ormlite:ormlite-android:4.48'
+
+
 }
