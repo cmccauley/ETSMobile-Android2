@@ -16,25 +16,16 @@ import java.util.Calendar;
  * Created by gnut3ll4 on 26/03/16.
  */
 public class DailyListener implements WakefulIntentService.AlarmListener {
+
+    public static final long INTERVAL_SYNC = AlarmManager.INTERVAL_HOUR;
+
     public void scheduleAlarms(AlarmManager mgr, PendingIntent pi, Context context) {
         // register when enabled in preferences
-//        if (PreferenceHelper.getUpdateCheckDaily(context)) {
+
         Log.i("DailyListener", "Schedule update check...");
 
-        // every day at 9 am
         Calendar calendar = Calendar.getInstance();
-        // if it's after or equal 9 am schedule for next day
-//        if (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) >= 9) {
-//            calendar.add(Calendar.DAY_OF_YEAR, 1); // add, not set!
-//        }
-//        calendar.set(Calendar.HOUR_OF_DAY, 9);
-//        calendar.set(Calendar.MINUTE, 0);
-//        calendar.set(Calendar.SECOND, 0);
-
-        mgr.setInexactRepeating(AlarmManager.RTC, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_HOUR/30,pi);
-//                AlarmManager.INTERVAL_DAY, pi);
-//        }
+        mgr.setInexactRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), INTERVAL_SYNC, pi);
     }
 
     public void sendWakefulWork(Context context) {

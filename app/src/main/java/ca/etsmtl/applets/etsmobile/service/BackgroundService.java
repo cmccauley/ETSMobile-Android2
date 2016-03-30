@@ -64,7 +64,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by gnut3ll4 on 26/03/16.
  */
-public class BackgroundService extends WakefulIntentService implements RequestListener<Object> {
+public class BackgroundService extends WakefulIntentService {
 
     DatabaseHelper databaseHelper;
     Dao<JoursRemplaces, ?> daoJoursRemplaces;
@@ -82,7 +82,7 @@ public class BackgroundService extends WakefulIntentService implements RequestLi
      */
     @Override
     public void doWakefulWork(Intent intent) {
-        Log.e("TEST", "BACKGROUND TASK EXECUTING.......");
+        Log.d("SYNC", "SYNC STARTED");
         Calendar client;
         HttpTransport transport = AndroidHttp.newCompatibleTransport();
         JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
@@ -99,7 +99,6 @@ public class BackgroundService extends WakefulIntentService implements RequestLi
 
         String selectedAccount = securePreferences.getString(Constants.SELECTED_ACCOUNT, "");
 
-
         credential = GoogleAccountCredential.usingOAuth2(getApplicationContext(), Collections.singleton(CalendarScopes.CALENDAR));
         credential.setSelectedAccountName(selectedAccount);
 
@@ -107,12 +106,6 @@ public class BackgroundService extends WakefulIntentService implements RequestLi
                 .setApplicationName("Google-CalendarAndroidSample/1.0")
                 .build();
 
-        /*
-        DataManager dataManager = DataManager.getInstance(this);
-
-        dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_SEANCES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
-        dataManager.getDataFromSignet(DataManager.SignetMethods.LIST_JOURSREMPLACES_CURRENT_AND_NEXT_SESSION, ApplicationManager.userCredentials, this);
-        */
         SignetsMobileSoap signetsMobileSoap = new SignetsMobileSoap();
 
         //Checking if calendar exists and create it if not
@@ -311,7 +304,7 @@ public class BackgroundService extends WakefulIntentService implements RequestLi
                 .subscribe(new Observer<Object>() {
                     @Override
                     public void onCompleted() {
-                        Log.e("TESTT", "SYNC COMPLETED");
+                        Log.d("SYNC", "SYNC COMPLETED");
                     }
 
                     @Override
@@ -327,36 +320,4 @@ public class BackgroundService extends WakefulIntentService implements RequestLi
 
     }
 
-    @Override
-    public void onRequestFailure(SpiceException spiceException) {
-        spiceException.printStackTrace();
-    }
-
-
-    @Override
-    public void onRequestSuccess(Object o) {
-
-        //lireJoursRemplaces
-        if (o instanceof listeJoursRemplaces) {
-            listeJoursRemplaces listeJoursRemplaces = (listeJoursRemplaces) o;
-            new Synchronizer<JoursRemplaces>(daoJoursRemplaces)
-                    .synchronize(listeJoursRemplaces.listeJours);
-        }
-
-        //listeSeances
-        if (o instanceof listeSeances) {
-            listeSeances listeSeancesObj = (listeSeances) o;
-
-            for (Seances SeancesInAPI : listeSeancesObj.ListeDesSeances) {
-
-                SeancesInAPI.id = SeancesInAPI.coursGroupe +
-                        SeancesInAPI.dateDebut +
-                        SeancesInAPI.dateFin +
-                        SeancesInAPI.local;
-            }
-            new Synchronizer<Seances>(daoSeances)
-                    .synchronize(listeSeancesObj.ListeDesSeances);
-
-        }
-    }
 }
