@@ -156,6 +156,10 @@
     <string name="toast_Calendar_Update_Error">Une erreur est survenue lors de la mise à jour du calendrier.</string>
     <string name="dialog_Updating_Calendar">Mise à jour du calendrier en cours</string>
     <string name="empty_calendar">Aucun cours à afficher</string>
+    <string name="legend">Légende</string>
+    <string name="legend_cours">Cours ●</string>
+    <string name="legend_final_exam">Examen final ●</string>
+
 
     <!-- Nouvelles -->
     <string-array name="sources_news_values">
@@ -280,5 +284,6 @@
     <string name="action_preferences">Préférences</string>
     <string name="pref_notification_courses">Notifications de cours</string>
     <string name="preference_key">pref_notification_courses</string>
+    <string name="legend_event">Événement ÉTS</string>
 
 </resources>

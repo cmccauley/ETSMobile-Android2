@@ -1,5 +1,6 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
+import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,17 +13,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
-import org.apache.commons.lang3.NotImplementedException;
 import org.joda.time.DateTime;
 
 import java.sql.SQLException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,34 +32,42 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import ca.etsmtl.applets.etsmobile.ApplicationManager;
+import ca.etsmtl.applets.etsmobile.R;
 import ca.etsmtl.applets.etsmobile.db.DatabaseHelper;
 import ca.etsmtl.applets.etsmobile.http.AppletsApiCalendarRequest;
 import ca.etsmtl.applets.etsmobile.http.DataManager;
-import ca.etsmtl.applets.etsmobile.http.DataManager.SignetMethods;
 import ca.etsmtl.applets.etsmobile.model.Event;
 import ca.etsmtl.applets.etsmobile.model.ListeDeSessions;
 import ca.etsmtl.applets.etsmobile.model.Seances;
+import ca.etsmtl.applets.etsmobile.model.Trimestre;
 import ca.etsmtl.applets.etsmobile.ui.adapter.SeanceAdapter;
-import ca.etsmtl.applets.etsmobile.ui.adapter.TodayDataRowItem;
+import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.CourseDecorator;
+import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.EventDecorator;
+import ca.etsmtl.applets.etsmobile.ui.calendar_decorator.FinalExamDecorator;
 import ca.etsmtl.applets.etsmobile.util.AnalyticsHelper;
 import ca.etsmtl.applets.etsmobile.util.HoraireManager;
-import ca.etsmtl.applets.etsmobile.util.Utility;
 import ca.etsmtl.applets.etsmobile.views.CustomProgressDialog;
-import ca.etsmtl.applets.etsmobile.R;
 
 /**
  * Created by Thibaut on 30/08/14.
  */
-public class HoraireFragment extends HttpFragment implements Observer {
+public class HoraireFragment extends HttpFragment implements Observer, OnDateSelectedListener {
 
     private HoraireManager horaireManager;
     private CustomProgressDialog customProgressDialog;
-    private ListView horaireListView;
-    private ArrayList<TodayDataRowItem> listSeances;
+    private DateTime dateTime = new DateTime();
     private SeanceAdapter seanceAdapter;
     private DatabaseHelper databaseHelper;
     private ProgressBar progressBarSyncHoraire;
+    @Bind(R.id.calendarView)
+    MaterialCalendarView mCalendarView;
+
+    private ArrayList<CalendarDay> courseDays;
+    private ArrayList<CalendarDay> eventDays;
+    private ArrayList<CalendarDay> finalExamDays;
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -130,29 +140,29 @@ public class HoraireFragment extends HttpFragment implements Observer {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_calendar, container, false);
+        View v = inflater.inflate(R.layout.calendar_horaire_layout, container, false);
+        ButterKnife.bind(this, v);
 
         databaseHelper = new DatabaseHelper(getActivity());
 
-        horaireListView = (ListView) v.findViewById(R.id.listView_horaire);
-        horaireListView.setEmptyView(v.findViewById(R.id.txt_empty_calendar));
-
         seanceAdapter = new SeanceAdapter(getActivity());
-        horaireListView.setAdapter(seanceAdapter);
 
+        fillSeancesList(dateTime.toDate());
+        setEventsList();
 
-        try{
-            seanceAdapter.setItemList((ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryForAll(), (ArrayList<Event>) databaseHelper.getDao(Event.class).queryForAll());
-            seanceAdapter.notifyDataSetChanged();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        mCalendarView.setSelectedDate(new Date());
+        mCalendarView.setOnDateChangedListener(this);
+        mCalendarView.addDecorators(
+                new CourseDecorator(getActivity(), courseDays),
+                new FinalExamDecorator(getActivity(), finalExamDays),
+                new EventDecorator(getActivity(), eventDays));
+
 
         horaireManager = new HoraireManager(this, getActivity());
         horaireManager.addObserver(this);
 
         progressBarSyncHoraire = (ProgressBar) v.findViewById(R.id.progressBar_sync_horaire);
-        progressBarSyncHoraire.setVisibility(ProgressBar.GONE);
+        progressBarSyncHoraire.setVisibility(ProgressBar.VISIBLE);
 
 //        customProgressDialog = new CustomProgressDialog(getActivity(), R.drawable.loading_spinner, "Synchronisation en cours");
 //        customProgressDialog.show();
@@ -167,6 +177,8 @@ public class HoraireFragment extends HttpFragment implements Observer {
         dataManager.sendRequest(new AppletsApiCalendarRequest(getActivity(), dateStart, "2016-04-30"), this);*/
 
         AnalyticsHelper.getInstance(getActivity()).sendScreenEvent(getClass().getSimpleName());
+
+        openCourseListDialog();
         return v;
 
     }
@@ -185,21 +197,25 @@ public class HoraireFragment extends HttpFragment implements Observer {
         if (o instanceof ListeDeSessions) {
 
             ListeDeSessions listeDeSessions = (ListeDeSessions) o;
+
             DateTime dateDebut = new DateTime();
             DateTime dateEnd = new DateTime();
+            Trimestre trimestre;
 
             for (int i = 0; i < listeDeSessions.liste.size() - 1; i++) {
-                dateEnd = new DateTime(listeDeSessions.liste.get(i).dateFin);
+                trimestre = listeDeSessions.liste.get(i);
+                dateEnd = new DateTime(trimestre.dateFin);
 
-                if(dateDebut.isBefore(dateEnd.plusDays(1))) {
+                if (dateDebut.isBefore(dateEnd.plusDays(1))) {
+                    dateDebut = new DateTime(trimestre.dateDebut);
                     break;
                 }
             }
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            String dateToday = formatter.format(dateDebut.toDate());
+            String dateSessionStart = formatter.format(dateDebut.toDate());
             String dateSessionEnd = formatter.format(dateEnd.toDate());
-            dataManager.sendRequest(new AppletsApiCalendarRequest(getActivity(), dateToday, dateSessionEnd), this);
+            dataManager.sendRequest(new AppletsApiCalendarRequest(getActivity(), dateSessionStart, dateSessionEnd), this);
         }
 
         horaireManager.onRequestSuccess(o);
@@ -216,13 +232,82 @@ public class HoraireFragment extends HttpFragment implements Observer {
 //        customProgressDialog.dismiss();
         progressBarSyncHoraire.setVisibility(ProgressBar.GONE);
 
-        try{
-            seanceAdapter.setItemList((ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryForAll(),
-                    (ArrayList<Event>) databaseHelper.getDao(Event.class).queryForAll());
-            seanceAdapter.notifyDataSetChanged();
+        fillSeancesList(dateTime.toDate());
+    }
+
+    public void fillSeancesList(Date date) {
+        SimpleDateFormat seancesFormatter = new SimpleDateFormat("yyyy-MM-dd", getResources().getConfiguration().locale);
+        String today = seancesFormatter.format(date).toString();
+
+        try {
+            List<Seances> seances = databaseHelper.getDao(Seances.class)
+                    .queryBuilder()
+                    .where()
+                    .like("dateDebut", today + "%")
+                    .query();
+            List<Event> events = databaseHelper.getDao(Event.class)
+                    .queryBuilder()
+                    .where()
+                    .like("startDate", today + "%")
+                    .query();
+            seanceAdapter.setItemList(seances, events);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        seanceAdapter.notifyDataSetChanged();
     }
 
+    public void openCourseListDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.dialogStyle);
+        if (seanceAdapter.getCount() > 0) {
+            builder.setAdapter(seanceAdapter, null);
+            builder.setTitle(R.string.today_course);
+        } else {
+            builder.setTitle(R.string.empty_calendar);
+        }
+        builder.setNeutralButton(R.string.drawer_close, null);
+        builder.create().show();
+    }
+
+    public void setEventsList() {
+
+        courseDays = new ArrayList<>();
+        finalExamDays = new ArrayList<>();
+        eventDays = new ArrayList<>();
+
+        try {
+            ArrayList<Seances> seancesList = (ArrayList<Seances>) databaseHelper.getDao(Seances.class).queryForAll();
+            for (Seances seance : seancesList) {
+
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                Date seanceDay = formatter.parse(seance.dateDebut.substring(0, 10), new ParsePosition(0));
+                if (seance.descriptionActivite.contains("final"))
+                    finalExamDays.add(new CalendarDay(seanceDay));
+                else
+                    courseDays.add(new CalendarDay(seanceDay));
+            }
+
+            ArrayList<Event> eventList = (ArrayList<Event>) databaseHelper.getDao(Event.class).queryForAll();
+            for (Event event : eventList) {
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                Date eventDay = formatter.parse(event.getDateDebut().substring(0, 10), new ParsePosition(0));
+                eventDays.add(new CalendarDay(eventDay));
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    @Override
+    public void onDateSelected(MaterialCalendarView widget, CalendarDay date, boolean selected) {
+        widget.setSelectedDate(date);
+        fillSeancesList(date.getDate());
+
+        openCourseListDialog();
+    }
 }
