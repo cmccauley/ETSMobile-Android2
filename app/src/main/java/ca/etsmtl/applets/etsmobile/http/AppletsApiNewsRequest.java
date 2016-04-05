@@ -6,12 +6,10 @@ import android.util.Log;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.kobjects.base64.Base64;
@@ -43,49 +41,49 @@ public class AppletsApiNewsRequest extends SpringAndroidSpiceRequest<Nouvelles> 
     @Override
     public Nouvelles loadDataFromNetwork() throws Exception {
 
-        String address = context.getString(R.string.applets_api_news, source, startDate, endDate);
+        String url = context.getString(R.string.applets_api_news, source, startDate, endDate);
 
         Nouvelles nouvelles = null;
 
         try {
-
-            DefaultHttpClient client = new DefaultHttpClient();
-            HttpGet get = new HttpGet(address);
+            OkHttpClient client = new OkHttpClient();
 
             String apiCredentials = context.getString(R.string.credentials_api);
-            String basicAuth = "Basic " + new String(new Base64().encode(apiCredentials.getBytes()));
-            get.setHeader("Authorization", basicAuth);
-            get.setHeader("Content-Type", "application/json; charset=utf-8");
-            String method = get.getMethod();
+            Request request = new Request.Builder()
+                    .url(url)
+                    .get()
+                    .addHeader("authorization", "Basic " + new String(new Base64().encode(apiCredentials.getBytes())))
+                    .addHeader("cache-control", "no-cache")
+                    .build();
 
-            HttpResponse getResponse = client.execute(get);
-            HttpEntity responseEntity = getResponse.getEntity();
+            Response response = client.newCall(request).execute();
 
-
-            String result = EntityUtils.toString(responseEntity, "UTF-8");
-            JSONObject root = new JSONObject(result);
-            JSONObject data = root.getJSONObject("data");
-            ObjectMapper mapper = new ObjectMapper();
-            nouvelles = new Nouvelles();
+            if(response.code() == 200) {
+                JSONObject root = new JSONObject(response.body().string());
+                JSONObject data = root.getJSONObject("data");
+                ObjectMapper mapper = new ObjectMapper();
+                nouvelles = new Nouvelles();
 
                 Iterator keys = data.keys();
                 while (keys.hasNext()) {
 
-                int imageResource = 0;
-                String currentDynamicKey = (String) keys.next();
+                    int imageResource = 0;
+                    String currentDynamicKey = (String) keys.next();
 
-                imageResource = assignResource(currentDynamicKey);
+                    imageResource = assignResource(currentDynamicKey);
 
-                JSONArray arrayNews = data.getJSONArray(currentDynamicKey);
+                    JSONArray arrayNews = data.getJSONArray(currentDynamicKey);
 
-                for (int i = 0; i < arrayNews.length(); i++) {
-                    Nouvelle nouvelle = mapper.readValue(arrayNews.getJSONObject(i).toString(), Nouvelle.class);
-                    nouvelle.setImageResource(imageResource);
-                    nouvelles.add(nouvelle);
-                }
+                    for (int i = 0; i < arrayNews.length(); i++) {
+                        Nouvelle nouvelle = mapper.readValue(arrayNews.getJSONObject(i).toString(), Nouvelle.class);
+                        nouvelle.setImageResource(imageResource);
+                        nouvelles.add(nouvelle);
+                    }
                     Log.d("Nouvelles", TextUtils.join(",", nouvelles));
+                }
+            } else {
+                    Log.d("API_ERROR", "AppletsApiNewsRequest call is NOT 200 OK");
             }
-
         }
         catch(Exception e) {
             System.out.println(e.getMessage());

@@ -1,17 +1,14 @@
 package ca.etsmtl.applets.etsmobile.http;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.kobjects.base64.Base64;
@@ -34,48 +31,48 @@ public class AppletsApiSponsorRequest extends SpringAndroidSpiceRequest<SponsorL
     @Override
     public SponsorList loadDataFromNetwork() throws Exception {
 
-        String address = context.getString(R.string.applets_api_sponsors);
+        String url = context.getString(R.string.applets_api_sponsors);
 
         SponsorList sponsorList = null;
 
         try {
 
             // Instantiate the custom HttpClient to call Https request
-            DefaultHttpClient client = new DefaultHttpClient();
-            HttpGet get = new HttpGet(address);
+            OkHttpClient client = new OkHttpClient();
 
             String apiCredentials = context.getString(R.string.credentials_api);
+            Request request = new Request.Builder()
+                    .url(url)
+                    .get()
+                    .addHeader("authorization", "Basic " + new String(new Base64().encode(apiCredentials.getBytes())))
+                    .addHeader("cache-control", "no-cache")
+                    .build();
 
-            String basicAuth = "Basic " + new String(new Base64().encode(apiCredentials.getBytes()));
-            get.setHeader("Authorization", basicAuth);
-            get.setHeader("Content-Type", "application/json; charset=utf-8");
-            String method = get.getMethod();
+            Response response = client.newCall(request).execute();
 
-            HttpResponse getResponse = client.execute(get);
-            HttpEntity responseEntity = getResponse.getEntity();
+            if(response.code() == 200){
+                JSONObject data = new JSONObject(response.body().string());
+                ObjectMapper mapper = new ObjectMapper();
+                sponsorList = new SponsorList();
+                Iterator keys = data.keys();
 
-            String result = EntityUtils.toString(responseEntity, "UTF-8");
-            JSONObject data = new JSONObject(result);
+                while (keys.hasNext()) {
 
-            /*JSONObject root = new JSONObject(result);
-            JSONObject data = root.getJSONObject("data");*/
-            ObjectMapper mapper = new ObjectMapper();
-            sponsorList = new SponsorList();
-            Iterator keys = data.keys();
-            while (keys.hasNext()) {
+                    int imageResource = 0;
+                    String currentDynamicKey = (String) keys.next();
 
-                int imageResource = 0;
-                String currentDynamicKey = (String) keys.next();
+                    //imageResource = assignResource(currentDynamicKey);
 
-                //imageResource = assignResource(currentDynamicKey);
+                    JSONArray arraySponsors = data.getJSONArray(currentDynamicKey);
 
-                JSONArray arraySponsors = data.getJSONArray(currentDynamicKey);
-
-                for (int i = 0; i < arraySponsors.length(); i++) {
-                    Sponsor sponsor = mapper.readValue(arraySponsors.getJSONObject(i).toString(), Sponsor.class);
-                    //sponsor.setImageResource(imageResource);
-                    sponsorList.add(sponsor);
+                    for (int i = 0; i < arraySponsors.length(); i++) {
+                        Sponsor sponsor = mapper.readValue(arraySponsors.getJSONObject(i).toString(), Sponsor.class);
+                        //sponsor.setImageResource(imageResource);
+                        sponsorList.add(sponsor);
+                    }
                 }
+            } else {
+                Log.d("API_ERROR", "AppletsApiSponsorRequest call is NOT 200 OK");
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());

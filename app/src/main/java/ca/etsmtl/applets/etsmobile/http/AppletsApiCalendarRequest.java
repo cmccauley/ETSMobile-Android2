@@ -1,17 +1,15 @@
 package ca.etsmtl.applets.etsmobile.http;
 
 import android.content.Context;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import android.util.Log;
+
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.kobjects.base64.Base64;
-import java.util.Iterator;
 import ca.etsmtl.applets.etsmobile.model.Event;
 import ca.etsmtl.applets.etsmobile.model.EventList;
 import ca.etsmtl.applets.etsmobile2.R;
@@ -38,34 +36,37 @@ public class AppletsApiCalendarRequest extends SpringAndroidSpiceRequest<EventLi
 
         try {
             // Instantiate the custom HttpClient to call Https request
-            // @TODO - Use OkHttp instead of DefaultHttpClient (which is deprecated)
-            DefaultHttpClient client = new DefaultHttpClient();
-            HttpGet get = new HttpGet(url);
+            OkHttpClient client = new OkHttpClient();
 
             String apiCredentials = context.getString(R.string.credentials_api);
+            Request request = new Request.Builder()
+                    .url(url)
+                    .get()
+                    .addHeader("authorization", "Basic " + new String(new Base64().encode(apiCredentials.getBytes())))
+                    .addHeader("cache-control", "no-cache")
+                    .build();
 
-            String basicAuth = "Basic " + new String(new Base64().encode(apiCredentials.getBytes()));
-            get.setHeader("Authorization", basicAuth);
-            get.setHeader("Content-Type", "application/json; charset=utf-8");
-            String method = get.getMethod();
+            Response response = client.newCall(request).execute();
 
-            HttpResponse getResponse = client.execute(get);
-            HttpEntity responseEntity = getResponse.getEntity();
+            if(response.code() == 200){
+                String jsonData = response.body().string();
+                JSONObject result = new JSONObject(jsonData);
+                // If the returned value of "data" returned by the API becomes an Array,
+                // change the type of JSONObject to JSONArray
+                JSONObject data = result.getJSONObject("data");
 
-            JSONObject result = new JSONObject(EntityUtils.toString(responseEntity, "UTF-8"));
-            // If the returned value of "data" returned by the API becomes an Array,
-            // change the type of JSONObject to JSONArray
-            JSONObject data = result.getJSONObject("data");
-
-            // The API might eventually return other JSONArray or JSONObject
-            // You get them here with the key of the Array/Object
-            JSONArray ets = data.getJSONArray("ets");
-            for(int i=0; i<ets.length();i++){
-                JSONObject contents = ets.getJSONObject((i));
-                Event event = new Event(contents.getString("id"),
-                        contents.getString("start_date"), contents.getString("end_date"),
-                        contents.getString("summary"));
-                eventList.add(event);
+                // The API might eventually return other JSONArray or JSONObject
+                // You get them here with the key of the Array/Object
+                JSONArray ets = data.getJSONArray("ets");
+                for(int i=0; i<ets.length();i++){
+                    JSONObject contents = ets.getJSONObject((i));
+                    Event event = new Event(contents.getString("id"),
+                            contents.getString("start_date"), contents.getString("end_date"),
+                            contents.getString("summary"));
+                    eventList.add(event);
+                }
+            } else {
+                Log.d("API_ERROR", "AppletsApiCalendarRequest call is NOT 200 OK");
             }
         } catch (Exception e){
             System.out.println(e.getMessage());
