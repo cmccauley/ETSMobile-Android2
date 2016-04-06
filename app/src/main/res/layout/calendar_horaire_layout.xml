@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+
+        android:layout_height="wrap_content"
+        app:mcv_arrowColor="@color/ets_red_darker"
+        app:mcv_selectionColor="@color/ets_red" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <TextView
+            style="?android:listSeparatorTextViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/legend" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/legend_cours"
+            android:textStyle="bold"
+            android:textColor="@color/blue_ets" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/legend_final_exam"
+            android:textStyle="bold"
+            android:textColor="@color/ets_red" />
+
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/legend_event"-->
+            <!--android:textStyle="bold"-->
+            <!--android:textColor="@color/purple_bandwith" />-->
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar_sync_horaire"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="20px"
+        android:layout_marginTop="20px" />
+</LinearLayout>
