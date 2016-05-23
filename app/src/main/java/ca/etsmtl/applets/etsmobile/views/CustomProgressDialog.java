@@ -1,9 +1,13 @@
 package ca.etsmtl.applets.etsmobile.views;
 
+import ca.etsmtl.applets.etsmobile2.BuildConfig;
 import ca.etsmtl.applets.etsmobile2.R;
+
+import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
 import android.app.Dialog;
 import android.content.Context;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
@@ -28,7 +32,8 @@ public class CustomProgressDialog extends Dialog {
 		
 		rotatingImageView = new ImageView(context);
 		rotatingImageView.setImageResource(resourceIdOfImage);
-		rotatingImageView.setId(1);
+		if(android.os.Build.VERSION.SDK_INT >= 17) rotatingImageView.setId(View.generateViewId());
+		else rotatingImageView.setId(R.id.rotateViewId);
 		
 		layout.addView(rotatingImageView, params);
 		
