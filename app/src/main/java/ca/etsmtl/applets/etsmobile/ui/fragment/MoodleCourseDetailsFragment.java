@@ -1,15 +1,20 @@
 package ca.etsmtl.applets.etsmobile.ui.fragment;
 
+import android.Manifest;
 import android.app.DownloadManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,9 +51,11 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
     public static final String TELECHARGE_FICHIER_MOODLE = "A téléchargé un fichier de moodle";
     public static final String CONSULTE_PAGE_MOODLE = "A consulté une page sur Moodle";
     public static String COURSE_ID = "COURSE_ID";
+    private static final int MY_PERMISSIONS_REQUEST_STORAGE = 0;
 
     private long enqueue;
     private DownloadManager dm;
+    int downloadPermission;
 
     private String moodleCourseId;
 
@@ -83,6 +90,41 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
         } else {
             moodleCourseId = savedInstanceState.getString("moodleCourseId");
         }
+        refreshPermission();
+    }
+
+    public void refreshPermission(){
+        downloadPermission = ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    }
+
+    public void checkPermission(){
+
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_STORAGE);
+
+                // MY_PERMISSIONS_REQUEST_READ_STORAGE is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }else refreshPermission();
     }
 
     @Override
@@ -126,6 +168,35 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
         
         queryMoodleCoreCourses(moodleCourseId);
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    Log.d("permission", "Inside permission granted");
+                    refreshPermission();
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+
+                    Toast.makeText(getActivity(), "you must enable permissions in settings",Toast.LENGTH_LONG).show();
+                }
+                break;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
     @Override
@@ -234,7 +305,8 @@ public class MoodleCourseDetailsFragment extends HttpFragment {
                         request.setMimeType(mimetype.getMimeTypeFromExtension(extension));
 
                         dm = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
-                        enqueue = dm.enqueue(request);
+                        checkPermission();
+                        if(downloadPermission == 0) enqueue = dm.enqueue(request);
 
                         AnalyticsHelper.getInstance(getActivity())
                                 .sendActionEvent(getClass().getSimpleName(), TELECHARGE_FICHIER_MOODLE);
